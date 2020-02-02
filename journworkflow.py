@@ -1,14 +1,20 @@
 import os
 import PhotoScan
+#script 1 - aligns photos and deletes points outside bounding box and deletes points that are
+#above 0.5 reprojection error and goes through all folders doing that
+#script 2 - after user defines points set scale bar distance then script run after
+#optimizes cameras, build dense cloud, then delete more points above 0.5 reprojection
+#error and then build mesh and then add texture
 
+#Metashape.Application object has no attribute 'cpu_cores_inactive'
 
 def main():
 
 	global doc
 	doc = PhotoScan.app.document
-
-	app = QtGui.QApplication.instance()
-	parent = app.activeWindow()
+       
+	#app = QtGui.QApplication.instance()
+	#parent = app.activeWindow()
 	
 	#prompting for path to photos
 	path_photos = PhotoScan.app.getExistingDirectory("Specify input photo folder:")
@@ -19,7 +25,7 @@ def main():
 	preselection = PhotoScan.Preselection.GenericPreselection
 	keypoints = 40000 #align photos key point limit
 	tiepoints = 10000 #align photos tie point limit
-	source = PhotoScan.PointsSource.DensePoints #build mesh source
+	#source = PhotoScan.PointsSource.DensePoints #build mesh source
 	surface = PhotoScan.SurfaceType.Arbitrary #build mesh surface type
 	quality = PhotoScan.Quality.MediumQuality #build dense cloud quality
 	filtering = PhotoScan.FilterMode.AggressiveFiltering #depth filtering
@@ -47,7 +53,46 @@ def main():
 	chunk.matchPhotos(accuracy = accuracy, preselection = preselection, filter_mask = False, keypoint_limit = keypoints, tiepoint_limit = tiepoints)
 	chunk.alignCameras()
 	
+
+
+        #Removing points outside bounding box
+	for i in range(len(doc.chunks)):
+		chunk = doc.chunks[i]
+		R = chunk.region.rot		#Bounding box rotation matrix
+		C = chunk.region.center		#Bounding box center vertor
+		size = chunk.region.size
+		
+		if not (chunk.point_cloud and chunk.enabled):
+			continue
+		elif not len(chunk.point_cloud.points):
+			continue
+		for point in chunk.point_cloud.points:
+
+			if point.valid:
+				v = point.coord
+				v.size = 3
+				v_c = v - C
+				v_r = R.t() * v_c
+				
+				if abs(v_r.x) > abs(size.x / 2.):
+					point.valid = False
+				elif abs(v_r.y) > abs(size.y / 2.):
+					point.valid = False
+				elif abs(v_r.z) > abs(size.z / 2.):
+					point.valid = False
+				else:
+					continue
+
+	print("Points outside the region were removed.")
+
+	
+	#PhotoScan.app.addMenuItem("Custom menu/Filter point cloud by bounding box", main)	
+
+
+	#might be 2nd script below here
+	
 	chunk.optimizeCameras()
+
 
 	#building dense cloud
 	PhotoScan.app.gpu_mask = 1  #GPU devices binary mask
@@ -59,8 +104,8 @@ def main():
     
 
 	#building mesh
-	chunk.buildModel(surface = surface, source = source, interpolation = interpolation, face_count = face_num)
-
+	chunk.buildModel(surface = surface, interpolation = interpolation, face_count = face_num)
+	#source = source,
   
 
 
