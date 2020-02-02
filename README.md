@@ -2,7 +2,7 @@
 Metashape Scripts to assist researchers at the Ocean Recoveries Lab at UC Santa Barbara.
 
 <p align="center">
-<img src="https://unsplash.com/photos/T1Wru10gKhg" width="50%" alt="gif">
+<img src="https://unsplash.com/photos/T1Wru10gKhg" width="50%" alt="jpg">
 </p>
 
 ## Script 1
