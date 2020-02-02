@@ -1,10 +1,5 @@
 import os
 import PhotoScan
-#script 1 - aligns photos and deletes points outside bounding box and deletes points that are
-#above 0.5 reprojection error and goes through all folders doing that
-#script 2 - after user defines points set scale bar distance then script run after
-#optimizes cameras, build dense cloud, then delete more points above 0.5 reprojection
-#error and then build mesh and then add texture
 
 #Metashape.Application object has no attribute 'cpu_cores_inactive'
 
