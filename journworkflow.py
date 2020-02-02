@@ -29,15 +29,12 @@ def main():
 	atlas_size = 8192
 	blending = PhotoScan.BlendingMode.MosaicBlending #blending mode
 	color_corr = False
-    threshold=0.5
-
+	threshold=0.5
 	print("Script started")
-
 	#creating new chunk
 	doc.addChunk()
 	chunk = doc.chunks[-1]
 	chunk.label = "New Chunk"
-
 	#loading images
 	image_list = os.listdir(path_photos)
 	photo_list = list()
