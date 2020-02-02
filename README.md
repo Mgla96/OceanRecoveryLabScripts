@@ -1,4 +1,5 @@
-# OceanRecoveryLabScripts
+# Ocean Recovery Lab Scripts
+Metashape Scripts to assist researchers at the Ocean Recoveries Lab at UC Santa Barbara.
 
 <p align="center">
 <img src="https://media.giphy.com/media/xT9DPxv8oh2UCSZFYs/giphy.gif" width="50%" alt="gif">
