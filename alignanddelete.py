@@ -1,7 +1,8 @@
 import os
 import PhotoScan
+'''
 from PySide2 import QtWidgets, QtGui, QtCore
-
+'''
 
 #Metashape.Application object has no attribute 'cpu_cores_inactive'
 '''
@@ -14,8 +15,8 @@ def main():
 	global doc
 	doc = PhotoScan.app.document
        
-	app = QtGui.QApplication.instance()
-	parent = app.activeWindow()
+	#app = QtGui.QApplication.instance()
+	#parent = app.activeWindow()
 	
 	#prompting for path to photos
 	path_photos = PhotoScan.app.getExistingDirectory("Specify input photo folder:")
@@ -88,8 +89,7 @@ def main():
 
 	#might be 2nd script below here after user defines points and set scale bar distance
 	doc.save()
-
-
+	
 PhotoScan.app.addMenuItem("Custom menu/Process 1", main)	
 
 main()
