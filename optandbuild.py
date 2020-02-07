@@ -1,6 +1,6 @@
 import os
 import PhotoScan
-from PySide2 import QtWidgets, QtGui, QtCore
+import math, time
 
 '''
 This script will be called after the user defines points and set scale bar distance. 
@@ -12,6 +12,7 @@ def main():
 
     global doc
 	doc = PhotoScan.app.document
+	#chunk = doc.chunk
 	path_photos = PhotoScan.app.getExistingDirectory("Specify INPUT photo folder(containing all alignanddelete metashape files):")
 	path_export = PhotoScan.app.getExistingDirectory("Specify EXPORT folder:")	
 	
@@ -24,7 +25,10 @@ def main():
 		PhotoScan.app.cpu_cores_inactive = 2  #CPU cores inactive
 		chunk.buildDenseCloud(quality = quality, filter = filtering)
     	#Read reprojection Error and delete any 0.5 or greater
-		
+		f = PhotoScan.PointCloud.Filter()
+		f.init(chunk, criterion=PhotoScan.PointCloud.Filter.ReprojectionError)
+		f.removePoints(0.5)
+			
 		#building mesh
 		chunk.buildModel(surface = surface, interpolation = interpolation, face_count = face_num)
 		#source = source,
@@ -42,5 +46,5 @@ def main():
 
 PhotoScan.app.addMenuItem("Custom menu/Process 2", main)	
 main()
-print("Complete")
-	
+t1 = time.time()
+PhotoScan.app.messageBox("Completed in "+ str(int(t1-t0))+"seconds.")

@@ -1,15 +1,6 @@
 import os
 import PhotoScan
-'''
-from PySide2 import QtGui, QtCore, QtWidgets
-'''
-
-from PySide2.QtCore import *
-from PySide2.QtGui import *
-'''
-from PyQt5 import QtGui, QtCore, QtWidgets
-'''
-#Metashape.Application object has no attribute 'cpu_cores_inactive'
+import math, time
 '''
 This script will take a folder and loop through it's subfolders which consists of photos to add to each individual chunk. 
 This script will align photos and delete points outside bounding box as well as delete points that are above a 0.5 reprojection error for each subfolder of photos. 
@@ -25,8 +16,8 @@ def main():
 	#prompting for path to photos
 	path_photos = PhotoScan.app.getExistingDirectory("Specify INPUT photo folder(containing all metashape files):")
 	path_export = PhotoScan.app.getExistingDirectory("Specify EXPORT folder:")	
-
 	fold_list = os.listdir(path_photos)
+	t0 = time.time()
 	for folder in fold_list:
 		doc.save(path_export+"\\"+folder+".psx")
 		#processing parameters
@@ -46,8 +37,7 @@ def main():
 		color_corr = False
 		threshold=0.5
 		print("Script started")
-		#creating new chunk
-		#doc.addChunk()
+		#creating new chunk (might not need)
 		chunk = doc.chunks[-1]
 		chunk.label = "New Chunk"
 		#loading images
@@ -84,13 +74,16 @@ def main():
 						point.valid = False
 					else:
 						continue
-		print("Points outside the region were removed.")
-		#Read reprojection error and delete any 0.5 or greater
+			#Points outside the region were removed.
+			#Read reprojection error and delete any 0.5 or greater
+			f = PhotoScan.PointCloud.Filter()
+			f.init(chunk, criterion=PhotoScan.PointCloud.Filter.ReprojectionError)
+			f.removePoints(0.5)
 		try:
 			doc.save()
-			PhotoScan.app.messageBox("Complete! Now define points & set scale bar distance before running optandbuild.py")
 		except RuntimeError:
 			PhotoScan.app.messageBox("Can't save project :()")
 PhotoScan.app.addMenuItem("Custom menu/Process 1", main)	
 main()
-
+t1 = time.time()
+PhotoScan.app.messageBox("Completed in "+str(int(t1-t0))+"seconds. Now define points & set scale bar distance before running optandbuild.py")
