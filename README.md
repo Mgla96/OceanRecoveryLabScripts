@@ -1,9 +1,6 @@
 # Ocean Recovery Lab Scripts
 Metashape Scripts to assist researchers at the Ocean Recoveries Lab at UC Santa Barbara. <br>
 **Note this is still a work in progress**
-<p align="center">
-<img src="https://media.giphy.com/media/RMGQvpsyjLD2btmXXu/giphy.gif" width="50%" alt="gif">
-</p>
 
 ## alignandelete.py
 **STEP 1** <br>
