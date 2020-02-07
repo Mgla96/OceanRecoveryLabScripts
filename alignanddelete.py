@@ -24,7 +24,6 @@ def main():
 	
 	#prompting for path to photos
 	path_photos = PhotoScan.app.getExistingDirectory("Specify INPUT photo folder(containing all metashape files):")
-
 	path_export = PhotoScan.app.getExistingDirectory("Specify EXPORT folder:")	
 
 	fold_list = os.listdir(path_photos)
@@ -87,8 +86,11 @@ def main():
 						continue
 		print("Points outside the region were removed.")
 		#Read reprojection error and delete any 0.5 or greater
-		#PhotoScan.app.addMenuItem("Custom menu/Filter point cloud by bounding box", main)	
-		doc.save()
+		try:
+			doc.save()
+			PhotoScan.app.messageBox("Complete! Now define points & set scale bar distance before running optandbuild.py")
+		except RuntimeError:
+			PhotoScan.app.messageBox("Can't save project :()")
 PhotoScan.app.addMenuItem("Custom menu/Process 1", main)	
 main()
-print("Complete")
+
