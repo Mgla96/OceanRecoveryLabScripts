@@ -1,5 +1,5 @@
 # Ocean Recovery Lab Scripts
-Metashape Scripts to assist researchers at the Ocean Recoveries Lab at UC Santa Barbara.
+Metashape Scripts to assist researchers at the Ocean Recoveries Lab at UC Santa Barbara. <br>
 **Note this is still a work in progress**
 ## alignandelete.py
 **STEP 1** <br>
