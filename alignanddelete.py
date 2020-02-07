@@ -1,9 +1,14 @@
 import os
 import PhotoScan
 '''
-from PySide2 import QtWidgets, QtGui, QtCore
+from PySide2 import QtGui, QtCore, QtWidgets
 '''
 
+from PySide2.QtCore import *
+from PySide2.QtGui import *
+'''
+from PyQt5 import QtGui, QtCore, QtWidgets
+'''
 #Metashape.Application object has no attribute 'cpu_cores_inactive'
 '''
 This script will take a folder and loop through it's subfolders which consists of photos to add to each individual chunk. 
@@ -14,14 +19,13 @@ def main():
 
 	global doc
 	doc = PhotoScan.app.document
-       
-	#app = QtGui.QApplication.instance()
-	#parent = app.activeWindow()
+	##app = QtGui.Qapplication.instance()
+	##parent = app.activeWindow()
 	
 	#prompting for path to photos
 	path_photos = PhotoScan.app.getExistingDirectory("Specify input photo folder:")
 	path_export = PhotoScan.app.getExistingDirectory("Specify EXPORT folder:")
-	
+	doc.save(path_export+"\\"+"project.psx")
 	#processing parameters
 	accuracy = PhotoScan.Accuracy.HighAccuracy  #align photos accuracy
 	preselection = PhotoScan.Preselection.GenericPreselection
@@ -39,13 +43,11 @@ def main():
 	color_corr = False
 	threshold=0.5
 
-
 	print("Script started")
 	#creating new chunk
-	doc.addChunk()
+	#doc.addChunk()
 	chunk = doc.chunks[-1]
 	chunk.label = "New Chunk"
-
 
 	#loading images
 	image_list = os.listdir(path_photos)
@@ -85,11 +87,13 @@ def main():
 					continue
 	print("Points outside the region were removed.")
 	
-	#PhotoScan.app.addMenuItem("Custom menu/Filter point cloud by bounding box", main)	
+	#Read reprojection error and delete any 0.5 or greater
 
+
+	#PhotoScan.app.addMenuItem("Custom menu/Filter point cloud by bounding box", main)	
 	#might be 2nd script below here after user defines points and set scale bar distance
 	doc.save()
-	
+
 PhotoScan.app.addMenuItem("Custom menu/Process 1", main)	
 
 main()
