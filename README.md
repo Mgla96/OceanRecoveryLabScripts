@@ -1,5 +1,5 @@
 # Ocean Recovery Lab Scripts
-## Note this is still a work in progress
+### Note this is still a work in progress
 Metashape Scripts to assist researchers at the Ocean Recoveries Lab at UC Santa Barbara.
 
 ## Script 1
