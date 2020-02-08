@@ -27,7 +27,8 @@ def main():
 		for photo in image_list:
 			if ("jpg" or "jpeg" or "JPG" or "JPEG") in photo.lower():
 				photo_list.append(os.path.join(folderPath,photo))
-		doc = PhotoScan.app.document
+		#doc = PhotoScan.app.document
+		doc = PhotoScan.document()
 		doc.save(path_export+"\\"+folder+".psx")
 		chunk=doc.addChunk() 
 		chunk.addPhotos(photo_list)
