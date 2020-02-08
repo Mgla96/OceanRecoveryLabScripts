@@ -7,47 +7,36 @@ This script will align photos and delete points outside bounding box as well as 
 Then this script will export these updated files to the user's designated location.
 '''
 def main():
-
-	global doc
-	doc = PhotoScan.app.document
-	##app = QtGui.Qapplication.instance()
-	##parent = app.activeWindow()
-	
 	#prompting for path to photos
 	path_photos = PhotoScan.app.getExistingDirectory("Specify INPUT photo folder(containing all metashape files):")
 	path_export = PhotoScan.app.getExistingDirectory("Specify EXPORT folder:")	
+
+	#processing parameters
+	accuracy = PhotoScan.Accuracy.HighAccuracy  #align photos accuracy
+	preselection = PhotoScan.Preselection.GenericPreselection
+	keypoints = 40000 #align photos key point limit
+	tiepoints = 10000 #align photos tie point limit
+	#source = PhotoScan.PointsSource.DensePoints #build mesh source
+	threshold=0.5
 	fold_list = os.listdir(path_photos)
-	t0 = time.time()
 	for folder in fold_list:
 		print("folder name is : "+folder)
-		doc.save(path_export+"\\"+folder+".psx")
-		#processing parameters
-		accuracy = PhotoScan.Accuracy.HighAccuracy  #align photos accuracy
-		preselection = PhotoScan.Preselection.GenericPreselection
-		keypoints = 40000 #align photos key point limit
-		tiepoints = 10000 #align photos tie point limit
-		#source = PhotoScan.PointsSource.DensePoints #build mesh source
-		surface = PhotoScan.SurfaceType.Arbitrary #build mesh surface type
-		quality = PhotoScan.Quality.MediumQuality #build dense cloud quality
-		filtering = PhotoScan.FilterMode.AggressiveFiltering #depth filtering
-		interpolation = PhotoScan.Interpolation.EnabledInterpolation #build mesh interpolation
-		face_num = PhotoScan.FaceCount.HighFaceCount #build mesh polygon count
-		mapping = PhotoScan.MappingMode.GenericMapping #build texture mapping
-		atlas_size = 8192
-		blending = PhotoScan.BlendingMode.MosaicBlending #blending mode
-		color_corr = False
-		threshold=0.5
-		print("Script started")
+
+		#chunk = doc.chunk
 		#creating new chunk (might not need)
-		chunk = doc.chunks[-1]
-		chunk.label = "New Chunk"
+		#chunk = doc.chunks[-1]
+		#chunk.label = "New Chunk"
 		#loading images
+
 		folderPath = path_photos + "\\" + folder
 		image_list = os.listdir(folderPath)
 		photo_list = list()
 		for photo in image_list:
 			if ("jpg" or "jpeg" or "JPG" or "JPEG") in photo.lower():
-				photo_list.append(folderPath + "\\" + photo)
+				photo_list.append(os.path.join(folderPath,photo))
+		doc = PhotoScan.app.document
+		doc.save(path_export+"\\"+folder+".psx")
+		chunk=doc.addChunk()
 		chunk.addPhotos(photo_list)
 		#align photos
 		chunk.matchPhotos(accuracy = accuracy, preselection = preselection, filter_mask = False, keypoint_limit = keypoints, tiepoint_limit = tiepoints)
@@ -80,12 +69,30 @@ def main():
 			#Read reprojection error and delete any 0.5 or greater
 			f = PhotoScan.PointCloud.Filter()
 			f.init(chunk, criterion=PhotoScan.PointCloud.Filter.ReprojectionError)
-			f.removePoints(0.5)
+			f.removePoints(threshold)
+		doc.save()
+		'''
 		try:
 			doc.save()
 		except RuntimeError:
 			PhotoScan.app.messageBox("Can't save project :()")
+		'''
 PhotoScan.app.addMenuItem("Custom menu/Process 1", main)	
+t0 = time.time()
 main()
 t1 = time.time()
 PhotoScan.app.messageBox("Completed in "+str(int(t1-t0))+"seconds. Now define points & set scale bar distance before running optandbuild.py")
+
+'''
+for build model
+surface = PhotoScan.SurfaceType.Arbitrary #build mesh surface type
+quality = PhotoScan.Quality.MediumQuality #build dense cloud quality
+filtering = PhotoScan.FilterMode.AggressiveFiltering #depth filtering
+interpolation = PhotoScan.Interpolation.EnabledInterpolation #build mesh interpolation
+face_num = PhotoScan.FaceCount.HighFaceCount #build mesh polygon count
+mapping = PhotoScan.MappingMode.GenericMapping #build texture mapping
+atlas_size = 8192
+blending = PhotoScan.BlendingMode.MosaicBlending #blending mode
+color_corr = False
+
+'''
