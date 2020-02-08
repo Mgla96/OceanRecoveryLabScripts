@@ -36,7 +36,7 @@ def main():
 		chunk.matchPhotos(accuracy = accuracy, preselection = preselection, filter_mask = False, keypoint_limit = keypoints, tiepoint_limit = tiepoints)
 		chunk.alignCameras()
     	#Removing points outside bounding box
-		print(doc.chunks)
+		#print(doc.chunks)
 		chunk = doc.chunks[-1]
 		R = chunk.region.rot		#Bounding box rotation matrix
 		C = chunk.region.center		#Bounding box center vertor
