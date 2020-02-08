@@ -40,6 +40,7 @@ def main():
 		#building mesh
 		chunk.buildModel(surface = surface, interpolation = interpolation, face_count = face_num)
 		#source = source,
+		
 		#build texture
 		chunk.buildUV(mapping = mapping, count = 1)
 		chunk.buildTexture(blending = blending , color_correction = color_corr, size = atlas_size)
