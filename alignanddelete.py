@@ -19,6 +19,7 @@ def main():
 	fold_list = os.listdir(path_photos)
 	t0 = time.time()
 	for folder in fold_list:
+		print("folder name is : "+folder)
 		doc.save(path_export+"\\"+folder+".psx")
 		#processing parameters
 		accuracy = PhotoScan.Accuracy.HighAccuracy  #align photos accuracy
@@ -41,11 +42,12 @@ def main():
 		chunk = doc.chunks[-1]
 		chunk.label = "New Chunk"
 		#loading images
-		image_list = os.listdir(path_photos)
+		folderPath = path_photos + "\\" + folder
+		image_list = os.listdir(folderPath)
 		photo_list = list()
 		for photo in image_list:
 			if ("jpg" or "jpeg" or "JPG" or "JPEG") in photo.lower():
-				photo_list.append(path_photos + "\\" + photo)
+				photo_list.append(folderPath + "\\" + photo)
 		chunk.addPhotos(photo_list)
 		#align photos
 		chunk.matchPhotos(accuracy = accuracy, preselection = preselection, filter_mask = False, keypoint_limit = keypoints, tiepoint_limit = tiepoints)
