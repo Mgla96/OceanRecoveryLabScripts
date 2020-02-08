@@ -15,7 +15,15 @@ def main():
 	#chunk = doc.chunk
 	path_photos = PhotoScan.app.getExistingDirectory("Specify INPUT photo folder(containing all alignanddelete metashape files):")
 	path_export = PhotoScan.app.getExistingDirectory("Specify EXPORT folder:")	
-	
+	surface = PhotoScan.SurfaceType.Arbitrary #build mesh surface type
+	quality = PhotoScan.Quality.MediumQuality #build dense cloud quality
+	filtering = PhotoScan.FilterMode.AggressiveFiltering #depth filtering
+	interpolation = PhotoScan.Interpolation.EnabledInterpolation #build mesh interpolation
+	face_num = PhotoScan.FaceCount.HighFaceCount #build mesh polygon count
+	mapping = PhotoScan.MappingMode.GenericMapping #build texture mapping
+	atlas_size = 8192
+	blending = PhotoScan.BlendingMode.MosaicBlending #blending mode
+	color_corr = False
 	fold_list = os.listdir(path_photos)
 	for folder in fold_list:	
 		doc.save(path_export+"\\"+folder+".psx")

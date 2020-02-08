@@ -10,7 +10,6 @@ def main():
 	#prompting for path to photos
 	path_photos = PhotoScan.app.getExistingDirectory("Specify INPUT photo folder(containing all metashape files):")
 	path_export = PhotoScan.app.getExistingDirectory("Specify EXPORT folder:")	
-
 	#processing parameters
 	accuracy = PhotoScan.Accuracy.HighAccuracy  #align photos accuracy
 	preselection = PhotoScan.Preselection.GenericPreselection
@@ -21,13 +20,7 @@ def main():
 	fold_list = os.listdir(path_photos)
 	for folder in fold_list:
 		print("folder name is : "+folder)
-
-		#chunk = doc.chunk
-		#creating new chunk (might not need)
-		#chunk = doc.chunks[-1]
-		#chunk.label = "New Chunk"
 		#loading images
-
 		folderPath = path_photos + "\\" + folder
 		image_list = os.listdir(folderPath)
 		photo_list = list()
@@ -42,7 +35,9 @@ def main():
 		chunk.matchPhotos(accuracy = accuracy, preselection = preselection, filter_mask = False, keypoint_limit = keypoints, tiepoint_limit = tiepoints)
 		chunk.alignCameras()
     	#Removing points outside bounding box
+		#chunk = doc.chunks[i]
 		for i in range(len(doc.chunks)):
+			print(doc.chunks)
 			chunk = doc.chunks[i]
 			R = chunk.region.rot		#Bounding box rotation matrix
 			C = chunk.region.center		#Bounding box center vertor
@@ -82,17 +77,3 @@ t0 = time.time()
 main()
 t1 = time.time()
 PhotoScan.app.messageBox("Completed in "+str(int(t1-t0))+"seconds. Now define points & set scale bar distance before running optandbuild.py")
-
-'''
-for build model
-surface = PhotoScan.SurfaceType.Arbitrary #build mesh surface type
-quality = PhotoScan.Quality.MediumQuality #build dense cloud quality
-filtering = PhotoScan.FilterMode.AggressiveFiltering #depth filtering
-interpolation = PhotoScan.Interpolation.EnabledInterpolation #build mesh interpolation
-face_num = PhotoScan.FaceCount.HighFaceCount #build mesh polygon count
-mapping = PhotoScan.MappingMode.GenericMapping #build texture mapping
-atlas_size = 8192
-blending = PhotoScan.BlendingMode.MosaicBlending #blending mode
-color_corr = False
-
-'''
