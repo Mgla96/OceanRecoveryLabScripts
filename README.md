@@ -3,7 +3,7 @@ Metashape Scripts to assist researchers at the Ocean Recoveries Lab at UC Santa 
 
 
 <p align="center">
-<img src="https://media.giphy.com/media/TH0SVl4SWwyFEcoRhp/giphy.gif" width="50%" alt="gif">
+<img src="https://media.giphy.com/media/TH0SVl4SWwyFEcoRhp/giphy.gif" width="100%" alt="gif">
 </p>
 
 
