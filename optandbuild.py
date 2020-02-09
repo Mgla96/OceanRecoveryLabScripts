@@ -7,19 +7,12 @@ This script will be called after the user defines points and set scale bar dista
 This script will optimize cameras, build dense cloud, then delete more points above a 0.5 reprojection error. 
 Then it will continue to build mesh and add texture.
 '''
-
 def main():
-
-    global doc
-	doc = PhotoScan.app.document
-
-	#chunk = doc.chunk
 	path_photos = PhotoScan.app.getExistingDirectory("Specify INPUT photo folder(containing all alignanddelete metashape files):")
 	#don't need path export will put back in same place
-	#path_export = PhotoScan.app.getExistingDirectory("Specify EXPORT folder:")	
 	surface = PhotoScan.SurfaceType.Arbitrary #build mesh surface type
-	quality = PhotoScan.Quality.MediumQuality #build dense cloud quality
-	filtering = PhotoScan.FilterMode.AggressiveFiltering #depth filtering
+	quality = PhotoScan.Quality.HighQuality #build dense cloud quality
+	filtering = PhotoScan.FilterMode.MildFiltering #depth filtering
 	interpolation = PhotoScan.Interpolation.EnabledInterpolation #build mesh interpolation
 	face_num = PhotoScan.FaceCount.HighFaceCount #build mesh polygon count
 	mapping = PhotoScan.MappingMode.GenericMapping #build texture mapping
@@ -31,22 +24,19 @@ def main():
 		if ("psx" or "Psx") in folder.lower():
 			print(folder)
 			doc = PhotoScan.app.document
-			doc.open("folder")
+			doc.open(folder)
 			chunk=doc.chunk
 			#optimize cameras
 			chunk.optimizeCameras()
-
-			#building dense cloud
-			chunk.buildDenseCloud()
 
 			#Read reprojection Error and delete any 0.5 or greater
 			f = PhotoScan.PointCloud.Filter()
 			f.init(chunk, criterion=PhotoScan.PointCloud.Filter.ReprojectionError)
 			f.removePoints(0.5)
-
+	
 			#building dense cloud
-			chunk.buildDenseCloud(quality = quality, filter = filtering)
-    	
+			chunk.buildDepthMaps(quality = quality, filter = filtering)
+			chunk.buildDenseCloud(point_colors = True)
 			#building mesh
 			chunk.buildModel(surface = surface, interpolation = interpolation, face_count = face_num)
 		
@@ -56,7 +46,6 @@ def main():
 			PhotoScan.app.update()
 			#export
 			#chunk.exportModel(path_export + "\\model.obj", format = "obj", texture_format='jpg')
-    		print("Now saving.")
 			#saving docs
 			doc.save()
 		else:
@@ -64,7 +53,7 @@ def main():
 PhotoScan.app.addMenuItem("Custom menu/Process 2", main)	
 t0 = time.time()
 main()
-t1 = time.time()
+t1 = time.time()	
 PhotoScan.app.messageBox("Completed in "+ str(int(t1-t0))+"seconds.")
 
 			
