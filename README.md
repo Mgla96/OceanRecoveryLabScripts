@@ -2,7 +2,7 @@
 Metashape Scripts to assist researchers at the Ocean Recoveries Lab at UC Santa Barbara. <br>
 
 <p align="center">
-<img src="https://media.giphy.com/media/VmwIEOyHHub3W/giphy.gif" width="50%" alt="gif">
+    <img src="https://media.giphy.com/media/VmwIEOyHHub3W/giphy.gif" width="60%" alt="gif">
 </p>
 
 ## alignandelete.py
