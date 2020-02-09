@@ -11,3 +11,5 @@ alignanddelete will take a folder and loop through it's subfolders which consist
 optandbuild will be called after the user defines points and set scale bar distance. This script will optimize cameras, build dense cloud, then delete more points above a 0.5 reprojection error. Then it will continue 
 to build mesh and add texture.
 
+
+

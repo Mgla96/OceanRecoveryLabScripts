@@ -29,6 +29,28 @@ def main():
 			#optimize cameras
 			chunk.optimizeCameras()
 
+			R = chunk.region.rot		#Bounding box rotation matrix
+			C = chunk.region.center		#Bounding box center vertor
+			size = chunk.region.size
+			if not (chunk.point_cloud and chunk.enabled):
+				continue
+			elif not len(chunk.point_cloud.points):
+				continue
+			for point in chunk.point_cloud.points:
+				if point.valid:
+					v = point.coord
+					v.size = 3
+					v_c = v - C
+					v_r = R.t() * v_c	
+					if abs(v_r.x) > abs(size.x / 2.):
+						point.valid = False
+					elif abs(v_r.y) > abs(size.y / 2.):
+						point.valid = False
+					elif abs(v_r.z) > abs(size.z / 2.):
+						point.valid = False
+					else:
+						continue
+
 			#Read reprojection Error and delete any 0.5 or greater
 			f = PhotoScan.PointCloud.Filter()
 			f.init(chunk, criterion=PhotoScan.PointCloud.Filter.ReprojectionError)
@@ -39,14 +61,10 @@ def main():
 			chunk.buildDenseCloud(point_colors = True)
 			#building mesh
 			chunk.buildModel(surface = surface, interpolation = interpolation, face_count = face_num)
-		
 			#build texture
 			chunk.buildUV(mapping = mapping, count = 1)
 			chunk.buildTexture(blending = blending , color_correction = color_corr, size = atlas_size)
 			PhotoScan.app.update()
-			#export
-			#chunk.exportModel(path_export + "\\model.obj", format = "obj", texture_format='jpg')
-			#saving docs
 			doc.save()
 		else:
 			continue
