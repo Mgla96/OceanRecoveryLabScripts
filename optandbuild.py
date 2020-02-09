@@ -8,7 +8,7 @@ This script will optimize cameras, build dense cloud, then delete more points ab
 Then it will continue to build mesh and add texture.
 '''
 def main():
-	path_photos = PhotoScan.app.getExistingDirectory("Specify INPUT photo folder(containing all alignanddelete metashape files):")
+	path_photos = PhotoScan.app.getExistingDirectory("Specify photo folder(containing all alignanddelete metashape files):")
 	#don't need path export will put back in same place
 	surface = PhotoScan.SurfaceType.Arbitrary #build mesh surface type
 	quality = PhotoScan.Quality.HighQuality #build dense cloud quality
@@ -28,7 +28,6 @@ def main():
 			chunk=doc.chunk
 			#optimize cameras
 			chunk.optimizeCameras()
-
 			R = chunk.region.rot		#Bounding box rotation matrix
 			C = chunk.region.center		#Bounding box center vertor
 			size = chunk.region.size
