@@ -55,7 +55,7 @@ def main():
 			chunk.buildTexture(blending = blending , color_correction = color_corr, size = atlas_size)
 			PhotoScan.app.update()
 			#export
-			chunk.exportModel(path_export + "\\model.obj", format = "obj", texture_format='jpg')
+			#chunk.exportModel(path_export + "\\model.obj", format = "obj", texture_format='jpg')
     		print("Now saving.")
 			#saving docs
 			doc.save()
