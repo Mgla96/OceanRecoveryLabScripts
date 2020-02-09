@@ -18,7 +18,7 @@ def main():
 	mapping = PhotoScan.MappingMode.GenericMapping #build texture mapping
 	atlas_size = 8192
 	blending = PhotoScan.BlendingMode.MosaicBlending #blending mode
-	color_corr = False
+	#color_corr = False
 	fold_list = os.listdir(path_photos)
 	for folder in fold_list:	
 		if ("psx" or "Psx") in folder.lower():
@@ -63,7 +63,7 @@ def main():
 			chunk.buildModel(surface = surface, interpolation = interpolation, face_count = face_num)
 			#build texture
 			chunk.buildUV(mapping = mapping, count = 1)
-			chunk.buildTexture(blending = blending , color_correction = color_corr, size = atlas_size)
+			chunk.buildTexture(blending = blending , size = atlas_size)
 			PhotoScan.app.update()
 			doc.save()
 		else:
