@@ -2,9 +2,9 @@ import os
 import PhotoScan
 import math, time
 '''
-This script will take a folder and loop through it's subfolders which consists of photos to add to each individual chunk. 
-This script will align photos and delete points outside bounding box as well as delete points that are above a 0.5 reprojection error for each subfolder of photos. 
-Then this script will export these updated files to the user's designated location.
+alignanddelete will take a folder directory and loop through it's subfolders of separate coral treatments which consists of overlapping photos. 
+This script will create a new chunk add and align photos, create tie points, estimate camera locations and delete all tie points outside bounding box. 
+Then it will also delete pixels above a 0.5 reprojection error. Then this script will export these updated files to the user's designated location. 
 '''
 def main():
 	#prompting for path to photos
@@ -15,7 +15,6 @@ def main():
 	preselection = PhotoScan.Preselection.GenericPreselection
 	keypoints = 40000 #align photos key point limit
 	tiepoints = 10000 #align photos tie point limit
-	#source = PhotoScan.PointsSource.DensePoints #build mesh source
 	threshold=0.5
 	fold_list = os.listdir(path_photos)
 	for folder in fold_list:
@@ -27,7 +26,6 @@ def main():
 		for photo in image_list:
 			if ("jpg" or "jpeg" or "JPG" or "JPEG") in photo.lower():
 				photo_list.append(os.path.join(folderPath,photo))
-		#doc = PhotoScan.app.document
 		doc = PhotoScan.Document()
 		doc.save(path_export+"\\"+folder+".psx")
 		chunk=doc.addChunk() 
@@ -36,7 +34,6 @@ def main():
 		chunk.matchPhotos(accuracy = accuracy, preselection = preselection, filter_mask = False, keypoint_limit = keypoints, tiepoint_limit = tiepoints)
 		chunk.alignCameras()
     	#Removing points outside bounding box
-		#print(doc.chunks)
 		chunk = doc.chunks[-1]
 		R = chunk.region.rot		#Bounding box rotation matrix
 		C = chunk.region.center		#Bounding box center vertor

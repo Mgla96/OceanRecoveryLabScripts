@@ -1,15 +1,13 @@
 import os
 import PhotoScan
 import math, time
-
 '''
-This script will be called after the user defines points and set scale bar distance. 
-This script will optimize cameras, build dense cloud, then delete more points above a 0.5 reprojection error. 
-Then it will continue to build mesh and add texture.
+optandbuild will be called after the user defines points and set scale bar distance. 
+This script will optimize cameras, delete other points outside bounding box, build dense cloud, then delete more pixels above a 0.5 reprojection error. 
+Then it will repeat this process for all coral treatments.
 '''
 def main():
 	path_photos = PhotoScan.app.getExistingDirectory("Specify photo folder(containing all alignanddelete metashape files):")
-	#don't need path export will put back in same place
 	surface = PhotoScan.SurfaceType.Arbitrary #build mesh surface type
 	quality = PhotoScan.Quality.HighQuality #build dense cloud quality
 	filtering = PhotoScan.FilterMode.MildFiltering #depth filtering
@@ -18,7 +16,6 @@ def main():
 	mapping = PhotoScan.MappingMode.GenericMapping #build texture mapping
 	atlas_size = 8192
 	blending = PhotoScan.BlendingMode.MosaicBlending #blending mode
-	#color_corr = False
 	fold_list = os.listdir(path_photos)
 	for folder in fold_list:	
 		if ("psx" or "Psx") in folder.lower():
@@ -49,12 +46,10 @@ def main():
 						point.valid = False
 					else:
 						continue
-
 			#Read reprojection Error and delete any 0.5 or greater
 			f = PhotoScan.PointCloud.Filter()
 			f.init(chunk, criterion=PhotoScan.PointCloud.Filter.ReprojectionError)
 			f.removePoints(0.5)
-	
 			#building dense cloud
 			chunk.buildDepthMaps(quality = quality, filter = filtering)
 			chunk.buildDenseCloud(point_colors = True)
