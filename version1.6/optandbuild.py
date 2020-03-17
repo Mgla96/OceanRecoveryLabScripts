@@ -51,7 +51,7 @@ def main():
 			f.init(chunk, criterion=PhotoScan.PointCloud.Filter.ReprojectionError)
 			f.removePoints(0.5)
 			#building dense cloud
-			chunk.buildDepthMaps(quality = downscale, filter = filtering)
+			chunk.buildDepthMaps(downscale = downscale, filter = filtering)
 			chunk.buildDenseCloud(point_colors = True)
 			#building mesh
 			chunk.buildModel(surface = surface, interpolation = interpolation, face_count = face_num)
