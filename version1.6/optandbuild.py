@@ -21,7 +21,7 @@ def main():
 		if ("psx" or "Psx") in folder.lower():
 			print(folder)
 			doc = PhotoScan.app.document
-			doc.open(folder)
+			doc.open(folder) #issue
 			chunk=doc.chunk
 			#optimize cameras
 			chunk.optimizeCameras()
@@ -51,7 +51,7 @@ def main():
 			f.init(chunk, criterion=PhotoScan.PointCloud.Filter.ReprojectionError)
 			f.removePoints(0.5)
 			#building dense cloud
-			chunk.buildDepthMaps(downscale = downscale, filter = filtering)
+			chunk.buildDepthMaps(downscale = downscale, filter_mode = filtering)
 			chunk.buildDenseCloud(point_colors = True)
 			#building mesh
 			chunk.buildModel(surface = surface, interpolation = interpolation, face_count = face_num)
