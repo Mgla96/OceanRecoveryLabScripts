@@ -7,10 +7,12 @@ This script will optimize cameras, delete other points outside bounding box, bui
 Then it will repeat this process for all coral treatments.
 '''
 def main():
-	path_photos = PhotoScan.app.getExistingDirectory("Specify photo folder(containing all alignanddelete metashape files):")
+	path_photos = PhotoScan.app.getExistingDirectory("Specify Input photo folder(containing all alignanddelete metashape files):")
+	path_export = PhotoScan.app.getExistingDirectory("Specify EXPORT folder:")
 	surface = PhotoScan.SurfaceType.Arbitrary #build mesh surface type
-	downscale = 1 # Photo alignment accuracy - 1 is "high", 0 is "highest" replaces PhotoScan.Quality.HighQuality in version 1.5
+	downscale = 2 # Photo alignment accuracy - 2 is "high quality?"
 	filtering = PhotoScan.FilterMode.MildFiltering #depth filtering
+	#want high quality not ultra high quality
 	interpolation = PhotoScan.Interpolation.EnabledInterpolation #build mesh interpolation
 	face_num = PhotoScan.FaceCount.HighFaceCount #build mesh polygon count
 	mapping = PhotoScan.MappingMode.GenericMapping #build texture mapping
@@ -54,12 +56,12 @@ def main():
 			chunk.buildDepthMaps(downscale = downscale, filter_mode = filtering)
 			chunk.buildDenseCloud(point_colors = True)
 			#building mesh
-			chunk.buildModel(surface = surface, interpolation = interpolation, face_count = face_num)
+			chunk.buildModel(surface_type = surface, interpolation = interpolation, face_count = face_num)
 			#build texture
-			chunk.buildUV(mapping = mapping, count = 1)
-			chunk.buildTexture(blending = blending , size = atlas_size)
+			chunk.buildUV(mapping_mode = mapping, page_count = 1)
+			chunk.buildTexture(blending_mode = blending , texture_size = atlas_size)
 			PhotoScan.app.update()
-			doc.save()
+			doc.save(path_export+"\\"+folder+".psx")
 		else:
 			continue
 PhotoScan.app.addMenuItem("Custom menu/Process 2", main)	
