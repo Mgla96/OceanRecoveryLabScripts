@@ -23,7 +23,7 @@ def main():
 		if ("psx" or "Psx") in folder.lower():
 			print(folder)
 			doc = PhotoScan.app.document
-			doc.open(folder) #issue
+			doc.open(folder) 
 			chunk=doc.chunk
 			#optimize cameras
 			chunk.optimizeCameras()
