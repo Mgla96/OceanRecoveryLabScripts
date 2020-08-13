@@ -18,7 +18,7 @@ def main():
     threshold=0.5
     fold_list = os.listdir(path_photos)
     for folder in fold_list:
-        print("folder name is : "+folder)
+        #print("folder name is : "+folder)
 #loading images
         folderPath = path_photos + "/" + folder
         image_list = os.listdir(folderPath)

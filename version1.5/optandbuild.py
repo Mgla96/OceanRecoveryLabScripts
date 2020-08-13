@@ -19,7 +19,7 @@ def main():
 	fold_list = os.listdir(path_photos)
 	for folder in fold_list:	
 		if ("psx" or "Psx") in folder.lower():
-			print(folder)
+			#print(folder)
 			doc = PhotoScan.app.document
 			doc.open(folder)
 			chunk=doc.chunk
