@@ -19,7 +19,7 @@ def main():
     fold_list = os.listdir(path_photos)
     for folder in fold_list:
         #print("folder name is : "+folder)
-#loading images
+        #loading images
         folderPath = path_photos + "/" + folder
         image_list = os.listdir(folderPath)
         photo_list = list()
@@ -56,8 +56,8 @@ def main():
                     point.valid = False
                 else:
                     continue
-    #Points outside the region were removed.
-    #Read reprojection error and delete any 0.5 or greater
+        #Points outside the region were removed.
+        #Read reprojection error and delete any 0.5 or greater
         f = PhotoScan.PointCloud.Filter()
         f.init(chunk, criterion=PhotoScan.PointCloud.Filter.ReprojectionError)
         f.removePoints(threshold)
