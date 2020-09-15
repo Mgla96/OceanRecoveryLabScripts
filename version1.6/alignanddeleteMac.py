@@ -8,17 +8,33 @@ Then it will also delete pixels above a 0.5 reprojection error. Then this script
 '''
 def main():
     #prompting for path to photos
-    path_photos = PhotoScan.app.getExistingDirectory("Specify INPUT photo folder(containing all metashape files):")
-    path_export = PhotoScan.app.getExistingDirectory("Specify EXPORT folder:")
+    path_photos=""
+    path_export=""
+    while True:
+        PhotoScan.app.messageBox("Specify Input photo folder")
+        path_photos = PhotoScan.app.getExistingDirectory("Specify INPUT photo folder(containing all metashape files):")
+        PhotoScan.app.messageBox("Specify Export Folder")
+        path_export = PhotoScan.app.getExistingDirectory("Specify EXPORT folder:")
+        if path_photos=="" or path_export=="":
+            PhotoScan.app.messageBox("input or export folder wasn't selected. Exiting script")
+            return False
+        elif path_photos==path_export:
+            PhotoScan.app.messageBox("For safety, a separate folder should be selected for the input and export folder. Please try again")
+        elif len(os.listdir(path_photos))<1:
+            PhotoScan.app.messageBox("A folder wasn't selected for the input folder or the input folder had no photos. Exiting script")
+            return False
+        else:
+            break
+        
     #processing parameters
     downscale = 1 # Photo alignment accuracy - 1 is "high" not "highest"
     generic_preselection = True  
     keypoints = 40000 #align photos key point limit
     tiepoints = 10000 #align photos tie point limit
     threshold=0.5
+
     fold_list = os.listdir(path_photos)
     for folder in fold_list:
-        #print("folder name is : "+folder)
         #loading images
         folderPath = path_photos + "/" + folder
         image_list = os.listdir(folderPath)
@@ -56,14 +72,17 @@ def main():
                     point.valid = False
                 else:
                     continue
-        #Points outside the region were removed.
-        #Read reprojection error and delete any 0.5 or greater
+        #Points outside the region were removed. Read reprojection error and delete any 0.5 or greater
         f = PhotoScan.PointCloud.Filter()
         f.init(chunk, criterion=PhotoScan.PointCloud.Filter.ReprojectionError)
         f.removePoints(threshold)
         doc.save()
-PhotoScan.app.addMenuItem("Custom menu/Process 1", main)
-t0 = time.time()
-main()
-t1 = time.time()
-PhotoScan.app.messageBox("Completed in "+str(int(t1-t0))+"seconds. Now define points & set scale bar distance before running optandbuild.py")
+    return True
+
+if __name__=="__main__":
+    PhotoScan.app.addMenuItem("Custom menu/Process 1", main)
+    t0 = time.time()
+    flag=main()
+    t1 = time.time()
+    if flag:
+        PhotoScan.app.messageBox("Completed in "+str(int(t1-t0))+"seconds. Now define points & set scale bar distance before running optandbuild.py")

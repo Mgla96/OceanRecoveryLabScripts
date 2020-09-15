@@ -7,8 +7,21 @@ This script will optimize cameras, delete other points outside bounding box, bui
 Then it will repeat this process for all coral treatments.
 '''
 def main():
-	path_photos = PhotoScan.app.getExistingDirectory("Specify Input photo folder(containing all alignanddelete metashape files):")
-	path_export = PhotoScan.app.getExistingDirectory("Specify EXPORT folder:")
+	#prompting for path to photos
+	path_photos,path_export="",""
+	while True:
+		PhotoScan.app.messageBox("Specify Input photo folder")
+		path_photos = PhotoScan.app.getExistingDirectory("Specify Input photo folder(containing all alignanddelete metashape files):")
+		PhotoScan.app.messageBox("Specify EXPORT folder")
+		path_export = PhotoScan.app.getExistingDirectory("Specify EXPORT folder:")
+		if path_photos=="" or path_export=="":
+			PhotoScan.app.messageBox("input or export folder wasn't selected. Exiting script")
+			return False
+		elif len(os.listdir(path_photos))<1:
+			PhotoScan.app.messageBox("A folder wasn't selected for the input folder or the input folder had no photos. Exiting script")
+		else:
+			break
+	
 	surface = PhotoScan.SurfaceType.Arbitrary #build mesh surface type
 	downscale = 2 # Photo alignment accuracy - 2 is "high quality?"
 	filtering = PhotoScan.FilterMode.MildFiltering #depth filtering
@@ -64,10 +77,13 @@ def main():
 			doc.save(path_export+"/"+folder+".psx")
 		else:
 			continue
-PhotoScan.app.addMenuItem("Custom menu/Process 2", main)	
-t0 = time.time()
-main()
-t1 = time.time()	
-PhotoScan.app.messageBox("Completed in "+ str(int(t1-t0))+"seconds.")
+
+if __name__=="__main__":
+	PhotoScan.app.addMenuItem("Custom menu/Process 2", main)	
+	t0 = time.time()
+	flag=main()
+	t1 = time.time()	
+	if flag:
+		PhotoScan.app.messageBox("Completed in "+ str(int(t1-t0))+"seconds.")
 
 			
