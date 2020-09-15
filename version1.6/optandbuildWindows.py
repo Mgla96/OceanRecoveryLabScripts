@@ -19,6 +19,7 @@ def main():
 			return False
 		elif len(os.listdir(path_photos))<1:
 			PhotoScan.app.messageBox("A folder wasn't selected for the input folder or the input folder had no photos. Exiting script")
+			return False
 		else:
 			tmp=os.listdir(path_photos)
 			if len(tmp)==1 and (("jpg" or "jpeg") in tmp[0].lower()):
