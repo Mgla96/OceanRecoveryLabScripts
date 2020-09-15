@@ -2,6 +2,8 @@ import os
 import PhotoScan
 import math, time
 '''
+Note this is outdated
+
 optandbuild will be called after the user defines points and set scale bar distance. 
 This script will optimize cameras, delete other points outside bounding box, build dense cloud, then delete more pixels above a 0.5 reprojection error. 
 Then it will repeat this process for all coral treatments.

@@ -2,6 +2,8 @@ import os
 import PhotoScan
 import math, time
 '''
+Note this is outdated
+
 alignanddelete will take a folder directory and loop through it's subfolders of separate coral treatments which consists of overlapping photos. 
 This script will create a new chunk add and align photos, create tie points, estimate camera locations and delete all tie points outside bounding box. 
 Then it will also delete pixels above a 0.5 reprojection error. Then this script will export these updated files to the user's designated location. 

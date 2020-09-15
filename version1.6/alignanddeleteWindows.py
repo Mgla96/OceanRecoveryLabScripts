@@ -24,6 +24,9 @@ def main():
             PhotoScan.app.messageBox("A folder wasn't selected for the input folder or the input folder had no photos. Exiting script")
             return False
         else:
+            tmp=os.listdir(path_photos)
+            if len(tmp)==1 and (("jpg" or "jpeg") in tmp[0].lower()):
+                PhotoScan.app.messageBox("Only one photo was found. If there were more photos please restart and click the folder rather than a photo. Otherwise ignore this message.")
             break
 
     #processing parameters
@@ -40,7 +43,7 @@ def main():
         image_list = os.listdir(folderPath)
         photo_list = list()
         for photo in image_list:
-            if ("jpg" or "jpeg" or "JPG" or "JPEG") in photo.lower():
+            if ("jpg" or "jpeg") in photo.lower():
                 photo_list.append(os.path.join(folderPath,photo))
         doc = PhotoScan.Document()
         doc.save(path_export+"\\"+folder+".psx")
