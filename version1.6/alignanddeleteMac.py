@@ -24,6 +24,8 @@ def main():
             return False
         else:
             tmp=os.listdir(path_photos)
+            #PhotoScan.app.messageBox(path_photos)
+            #PhotoScan.app.messageBox(tmp[0])
             if len(tmp)==1 and (("jpg" or "jpeg") in tmp[0].lower()):
                 PhotoScan.app.messageBox("Only one photo was found. If there were more photos please restart and click the folder rather than a photo. Otherwise ignore this message.")
             break
@@ -37,48 +39,52 @@ def main():
 
     fold_list = os.listdir(path_photos)
     for folder in fold_list:
-        #loading images
-        folderPath = path_photos + "/" + folder
-        image_list = os.listdir(folderPath)
-        photo_list = list()
-        for photo in image_list:
-            if ("jpg" or "jpeg") in photo.lower():
-                photo_list.append(os.path.join(folderPath,photo))
-        doc = PhotoScan.Document()
-        doc.save(path_export+"/"+folder+".psx")
-        chunk=doc.addChunk() 
-        chunk.addPhotos(photo_list)
-        #align photos
-        chunk.matchPhotos(downscale = downscale, generic_preselection = generic_preselection, filter_mask = False, keypoint_limit = keypoints, tiepoint_limit = tiepoints)
-        chunk.alignCameras()
-        #Removing points outside bounding box
-        chunk = doc.chunks[-1]
-        R = chunk.region.rot#Bounding box rotation matrix
-        C = chunk.region.center#Bounding box center vertor
-        size = chunk.region.size
-        if not (chunk.point_cloud and chunk.enabled):
-            continue
-        elif not len(chunk.point_cloud.points):
-            continue
-        for point in chunk.point_cloud.points:
-            if point.valid:
-                v = point.coord
-                v.size = 3
-                v_c = v - C
-                v_r = R.t() * v_c
-                if abs(v_r.x) > abs(size.x / 2.):
-                    point.valid = False
-                elif abs(v_r.y) > abs(size.y / 2.):
-                    point.valid = False
-                elif abs(v_r.z) > abs(size.z / 2.):
-                    point.valid = False
-                else:
-                    continue
-        #Points outside the region were removed. Read reprojection error and delete any 0.5 or greater
-        f = PhotoScan.PointCloud.Filter()
-        f.init(chunk, criterion=PhotoScan.PointCloud.Filter.ReprojectionError)
-        f.removePoints(threshold)
-        doc.save()
+        if not os.path.isfile(folder):
+            #loading images
+            folderPath = path_photos + "/" + folder
+            image_list = os.listdir(folderPath)
+            photo_list = list()
+            for photo in image_list:
+                if ("jpg" or "jpeg") in photo.lower():
+                    photo_list.append(os.path.join(folderPath,photo))
+            doc = PhotoScan.Document()
+            doc.save(path_export+"/"+folder+".psx")
+            chunk=doc.addChunk() 
+            chunk.addPhotos(photo_list)
+            #align photos
+            chunk.matchPhotos(downscale = downscale, generic_preselection = generic_preselection, filter_mask = False, keypoint_limit = keypoints, tiepoint_limit = tiepoints)
+            chunk.alignCameras()
+            #Removing points outside bounding box
+            chunk = doc.chunks[-1]
+            R = chunk.region.rot#Bounding box rotation matrix
+            C = chunk.region.center#Bounding box center vertor
+            size = chunk.region.size
+            if not (chunk.point_cloud and chunk.enabled):
+                continue
+            elif not len(chunk.point_cloud.points):
+                continue
+            for point in chunk.point_cloud.points:
+                if point.valid:
+                    v = point.coord
+                    v.size = 3
+                    v_c = v - C
+                    v_r = R.t() * v_c
+                    if abs(v_r.x) > abs(size.x / 2.):
+                        point.valid = False
+                    elif abs(v_r.y) > abs(size.y / 2.):
+                        point.valid = False
+                    elif abs(v_r.z) > abs(size.z / 2.):
+                        point.valid = False
+                    else:
+                        continue
+            #Points outside the region were removed. Read reprojection error and delete any 0.5 or greater
+            f = PhotoScan.PointCloud.Filter()
+            f.init(chunk, criterion=PhotoScan.PointCloud.Filter.ReprojectionError)
+            f.removePoints(threshold)
+            doc.save()
+        else:
+            st="not directory"+folder
+            PhotoScan.app.messageBox(st)
     return True
 
 if __name__=="__main__":
