@@ -15,7 +15,6 @@ def main():
         path_photos = PhotoScan.app.getExistingDirectory("Specify INPUT photo folder(containing all metashape files):")
         PhotoScan.app.messageBox("Specify Export Folder")
         path_export = PhotoScan.app.getExistingDirectory("Specify EXPORT folder:")
-        print(path_photos,path_export)
         if path_photos=="" or path_export=="":
             PhotoScan.app.messageBox("input or export folder wasn't selected. Exiting script")
             return False
