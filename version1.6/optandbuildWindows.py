@@ -10,7 +10,7 @@ Then it will repeat this process for all coral treatments.
 def main():
 	path_photos,path_export="",""
 	while True:
-		PhotoScan.app.messageBox("Specify Input photo folder")
+		PhotoScan.app.messageBox("Specify Input Photo Folder(containing all alignanddelete metashape files):")
 		path_photos = PhotoScan.app.getExistingDirectory("Specify Input photo folder(containing all alignanddelete metashape files):")
 		PhotoScan.app.messageBox("Specify EXPORT folder")
 		path_export = PhotoScan.app.getExistingDirectory("Specify EXPORT folder:")

@@ -10,8 +10,8 @@ def main():
 	#prompting for path to photos
 	path_photos,path_export="",""
 	while True:
-		PhotoScan.app.messageBox("Specify Input photo folder")
-		path_photos = PhotoScan.app.getExistingDirectory("Specify Input photo folder(containing all alignanddelete metashape files):")
+		PhotoScan.app.messageBox("Specify Input Photo Folder(containing all alignanddelete metashape files):")
+		path_photos = PhotoScan.app.getExistingDirectory("Specify Input Photo Folder(containing all alignanddelete metashape files):")
 		PhotoScan.app.messageBox("Specify EXPORT folder")
 		path_export = PhotoScan.app.getExistingDirectory("Specify EXPORT folder:")
 		if path_photos=="" or path_export=="":
