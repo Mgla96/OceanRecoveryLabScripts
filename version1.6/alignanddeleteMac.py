@@ -29,7 +29,7 @@ def main():
             break
     
     #processing parameters
-    downscale, = 1 # Photo alignment accuracy - 1 is "high" not "highest"
+    downscale = 1 # Photo alignment accuracy - 1 is "high" not "highest"
     generic_preselection = True  
     keypoints = 40000 #align photos key point limit
     tiepoints = 10000 #align photos tie point limit
