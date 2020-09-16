@@ -39,7 +39,7 @@ def main():
 		if "psx" in folder.lower():
 			doc = PhotoScan.app.document
 			#doc.open(folder) 
-			doc.open(path_photos+"/"+folder) 
+			doc.open(path_photos+"\\"+folder) 
 			chunk=doc.chunk
 			#optimize cameras
 			chunk.optimizeCameras()
