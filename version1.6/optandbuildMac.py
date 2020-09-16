@@ -36,11 +36,13 @@ def main():
 	atlas_size = 8192
 	blending = PhotoScan.BlendingMode.MosaicBlending #blending mode
 	fold_list = os.listdir(path_photos)
-	for folder in fold_list:	
-		if ("psx" or "Psx") in folder.lower():
+	for folder in fold_list:
+		print(folder)	
+		if "psx" in folder.lower():
 			#print(folder)
 			doc = PhotoScan.app.document
-			doc.open(folder) 
+			#doc.open(folder) 
+			doc.open(path_photos+"/"+folder) 
 			chunk=doc.chunk
 			#optimize cameras
 			chunk.optimizeCameras()

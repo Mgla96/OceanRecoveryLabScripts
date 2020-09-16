@@ -25,7 +25,6 @@ def main():
 			if len(tmp)==1 and (("jpg" or "jpeg") in tmp[0].lower()):
 				PhotoScan.app.messageBox("Only one photo was found. If there were more photos please restart and click the folder rather than a photo. Otherwise ignore this message.")
 			break
-	
 	surface = PhotoScan.SurfaceType.Arbitrary #build mesh surface type
 	downscale = 2 # Photo alignment accuracy - 2 is "high quality?"
 	filtering = PhotoScan.FilterMode.MildFiltering #depth filtering
@@ -37,10 +36,10 @@ def main():
 	blending = PhotoScan.BlendingMode.MosaicBlending #blending mode
 	fold_list = os.listdir(path_photos)
 	for folder in fold_list:	
-		if ("psx" or "Psx") in folder.lower():
-			#print(folder)
+		if "psx" in folder.lower():
 			doc = PhotoScan.app.document
-			doc.open(folder) 
+			#doc.open(folder) 
+			doc.open(path_photos+"/"+folder) 
 			chunk=doc.chunk
 			#optimize cameras
 			chunk.optimizeCameras()
@@ -83,8 +82,6 @@ def main():
 			continue
 
 if __name__=="__main__":
-	#global windows_dash="\\"
-	#global mac_dash="/"
 	PhotoScan.app.addMenuItem("Custom menu/Process 2", main)	
 	t0 = time.time()
 	flag=main()
