@@ -25,7 +25,7 @@ def main():
         else:
             tmp=os.listdir(path_photos)
             #PhotoScan.app.messageBox(path_photos)
-            #PhotoScan.app.messageBox(tmp[0])
+            #PhotoScan.app.messageBox(tmp[1])
             if len(tmp)==1 and (("jpg" or "jpeg") in tmp[0].lower()):
                 PhotoScan.app.messageBox("Only one photo was found. If there were more photos please restart and click the folder rather than a photo. Otherwise ignore this message.")
             break
@@ -82,9 +82,6 @@ def main():
             f.init(chunk, criterion=PhotoScan.PointCloud.Filter.ReprojectionError)
             f.removePoints(threshold)
             doc.save()
-        else:
-            st="not directory"+folder
-            PhotoScan.app.messageBox(st)
     return True
 
 if __name__=="__main__":
