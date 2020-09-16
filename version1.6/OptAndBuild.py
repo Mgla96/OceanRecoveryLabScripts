@@ -86,23 +86,25 @@ def main():
 			continue
 
 if __name__=="__main__":
-    PhotoScan.app.addMenuItem("Custom menu/Process 2", main)
-    global divider
-    divider=""
-    for i in range (1, len(sys.argv)):
-        arg = sys.argv[i]
-        if arg=="mac":
-            divider="/"
-        if arg=="windows":
-            divider="\\"
-    print("divider:",divider)
-    if divider=="":
-        PhotoScan.app.messageBox("In the arguments box type mac or windows based on which file system you are on")
-    else:
-        t0 = time.time()
-        flag=main()
-        t1 = time.time()	
-        if flag:
-            PhotoScan.app.messageBox("Completed in "+ str(int(t1-t0))+"seconds.")
+	PhotoScan.app.addMenuItem("Custom menu/Process 2", main)
+	global divider
+	divider=""
+	for i in range (1, len(sys.argv)):
+		arg = sys.argv[i]
+		if type(arg)==str:
+			arg=arg.lower()
+		if arg=="mac":
+			divider="/"
+		if arg=="windows":
+			divider="\\"
+	print("divider:",divider)
+	if divider=="":
+		PhotoScan.app.messageBox("In the arguments box type mac or windows based on which file system you are on")
+	else:
+		t0 = time.time()
+		flag=main()
+		t1 = time.time()
+		if flag:
+			PhotoScan.app.messageBox("Completed in "+ str(int(t1-t0))+"seconds.")
 
 			

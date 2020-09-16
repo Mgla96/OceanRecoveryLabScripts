@@ -92,12 +92,13 @@ if __name__=="__main__":
     divider=""
     for i in range (1, len(sys.argv)):
         arg = sys.argv[i]
+        if type(arg)==str:
+            arg=arg.lower()
         if arg=="mac":
             divider="/"
         if arg=="windows":
             divider="\\"
     print("divider:",divider)
-    
     if divider=="":
         PhotoScan.app.messageBox("In the arguments box type mac or windows based on which file system you are on")
     else:
