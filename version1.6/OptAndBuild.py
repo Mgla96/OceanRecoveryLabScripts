@@ -26,29 +26,28 @@ def main():
 			if len(tmp)==1 and (("jpg" or "jpeg") in tmp[0].lower()):
 				PhotoScan.app.messageBox("Only one photo was found. If there were more photos please restart and click the folder rather than a photo. Otherwise ignore this message.")
 			break
-	
+
+	#custom settings
 	surface = PhotoScan.SurfaceType.Arbitrary #build mesh surface type
-	downscale = 2 # Photo alignment accuracy - 2 is "high quality?"
+	downscale = 2 # Photo alignment accuracy - 2 is "high quality" (want high quality not ultra high quality)
 	filtering = PhotoScan.FilterMode.MildFiltering #depth filtering
-	#want high quality not ultra high quality
 	interpolation = PhotoScan.Interpolation.EnabledInterpolation #build mesh interpolation
 	face_num = PhotoScan.FaceCount.HighFaceCount #build mesh polygon count
 	mapping = PhotoScan.MappingMode.GenericMapping #build texture mapping
 	atlas_size = 8192
 	blending = PhotoScan.BlendingMode.MosaicBlending #blending mode
+
 	fold_list = os.listdir(path_photos)
 	for folder in fold_list:
 		print(folder)	
 		if "psx" in folder.lower():
-			#print(folder)
 			doc = PhotoScan.app.document
-			#doc.open(folder) 
 			doc.open(path_photos+divider+folder) 
 			chunk=doc.chunk
 			#optimize cameras
 			chunk.optimizeCameras()
 			R = chunk.region.rot		#Bounding box rotation matrix
-			C = chunk.region.center		#Bounding box center vertor
+			C = chunk.region.center		#Bounding box center vector
 			size = chunk.region.size
 			if not (chunk.point_cloud and chunk.enabled):
 				continue
@@ -97,7 +96,6 @@ if __name__=="__main__":
 			divider="/"
 		if arg=="windows":
 			divider="\\"
-	print("divider:",divider)
 	if divider=="":
 		PhotoScan.app.messageBox("In the arguments box type mac or windows based on which file system you are on")
 	else:

@@ -26,8 +26,6 @@ def main():
             return False
         else:
             tmp=os.listdir(path_photos)
-            #PhotoScan.app.messageBox(path_photos)
-            #PhotoScan.app.messageBox(tmp[1])
             if len(tmp)==1 and (("jpg" or "jpeg") in tmp[0].lower()):
                 PhotoScan.app.messageBox("Only one photo was found. If there were more photos please restart and click the folder rather than a photo. Otherwise ignore this message.")
             break
@@ -98,7 +96,6 @@ if __name__=="__main__":
             divider="/"
         if arg=="windows":
             divider="\\"
-    print("divider:",divider)
     if divider=="":
         PhotoScan.app.messageBox("In the arguments box type mac or windows based on which file system you are on")
     else:
