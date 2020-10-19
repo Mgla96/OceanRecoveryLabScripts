@@ -8,8 +8,10 @@ optandbuild will be called after the user defines points and set scale bar dista
 This script will optimize cameras, delete other points outside bounding box, build dense cloud, then delete more pixels above a 0.5 reprojection error. 
 Then it will repeat this process for all coral treatments.
 '''
-def main():
-	#prompting for path to photos
+def promptPath():
+	'''
+	Initial prompt for path to photos and export folder
+	'''
 	path_photos,path_export="",""
 	while True:
 		meta.app.messageBox("Specify Input Photo Folder(containing all alignanddelete metashape files):")
@@ -18,15 +20,19 @@ def main():
 		path_export = meta.app.getExistingDirectory("Specify EXPORT folder:")
 		if path_photos=="" or path_export=="":
 			meta.app.messageBox("input or export folder wasn't selected. Exiting script")
-			return False
+			return "",""
 		elif len(os.listdir(path_photos))<1:
 			meta.app.messageBox("A folder wasn't selected for the input folder or the input folder had no photos. Exiting script")
-			return False
+			return "",""
 		else:
 			tmp=os.listdir(path_photos)
 			if len(tmp)==1 and (("jpg" or "jpeg") in tmp[0].lower()):
 				meta.app.messageBox("Only one photo was found. If there were more photos please restart and click the folder rather than a photo. Otherwise ignore this message.")
 			break
+	return path_photos,path_export
+
+
+def main():
 	#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     #processing parameters - can edit the parameters here
 	surface = meta.SurfaceType.Arbitrary #build mesh surface type
@@ -39,6 +45,12 @@ def main():
 	blending = meta.BlendingMode.MosaicBlending #blending mode
 	volumetric_masks = True
 	#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	
+	#get input and output folders
+	path_photos,path_export=promptPath()
+	if path_photos=="" or path_export=="":
+		return False
+	
 	fold_list = os.listdir(path_photos)
 	for folder in fold_list:
 		#print(folder)	

@@ -9,8 +9,10 @@ alignanddelete will take a folder directory and loop through it's subfolders of 
 This script will create a new chunk add and align photos, create tie points, estimate camera locations and delete all tie points outside bounding box. 
 Then it will also delete pixels above a 0.5 reprojection error. Then this script will export these updated files to the user's designated location. 
 '''
-def main():
-    #prompting for path to photos
+def promptPath():
+    '''
+    Initial prompt for path to photos and export folder
+    '''
     path_photos,path_export="",""
     while True:
         meta.app.messageBox("Specify Input Photo folder(folder containing all metashape files)")
@@ -19,17 +21,21 @@ def main():
         path_export = meta.app.getExistingDirectory("Specify EXPORT folder:")
         if path_photos=="" or path_export=="":
             meta.app.messageBox("input or export folder wasn't selected. Exiting script")
-            return False
+            return "",""
         elif path_photos==path_export:
             meta.app.messageBox("For safety, a separate folder should be selected for the input and export folder. Please try again")
         elif len(os.listdir(path_photos))<1:
             meta.app.messageBox("A folder wasn't selected for the input folder or the input folder had no photos. Exiting script")
-            return False
+            return "",""
         else:
             tmp=os.listdir(path_photos)
             if len(tmp)==1 and (("jpg" or "jpeg") in tmp[0].lower()):
                 meta.app.messageBox("Only one photo was found. If there were more photos please restart and click the folder rather than a photo. Otherwise ignore this message.")
             break
+    return path_photos,path_export
+
+
+def main():
     #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     #processing parameters - can edit the parameters here
     downscale = 1 # Photo alignment accuracy - 1 is "high" not "highest"
@@ -38,6 +44,12 @@ def main():
     tiepoints = 10000 #align photos tie point limit
     threshold=0.5
     #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    
+    #get input and output folders
+    path_photos,path_export=promptPath()
+    if path_photos=="" or path_export=="":
+        return False
+
     fold_list = os.listdir(path_photos)
     for folder in fold_list:
         if not os.path.isfile(folder):
