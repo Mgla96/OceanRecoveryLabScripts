@@ -1,5 +1,6 @@
 import os
-import PhotoScan
+import Metashape as meta
+#import photoscan
 import math, time
 import sys
 
@@ -12,31 +13,31 @@ def main():
     #prompting for path to photos
     path_photos,path_export="",""
     while True:
-        PhotoScan.app.messageBox("Specify Input Photo folder(folder containing all metashape files)")
-        path_photos = PhotoScan.app.getExistingDirectory("Specify INPUT photo folder(folder containing all metashape files):")
-        PhotoScan.app.messageBox("Specify Export Folder")
-        path_export = PhotoScan.app.getExistingDirectory("Specify EXPORT folder:")
+        meta.app.messageBox("Specify Input Photo folder(folder containing all metashape files)")
+        path_photos = meta.app.getExistingDirectory("Specify INPUT photo folder(folder containing all metashape files):")
+        meta.app.messageBox("Specify Export Folder")
+        path_export = meta.app.getExistingDirectory("Specify EXPORT folder:")
         if path_photos=="" or path_export=="":
-            PhotoScan.app.messageBox("input or export folder wasn't selected. Exiting script")
+            meta.app.messageBox("input or export folder wasn't selected. Exiting script")
             return False
         elif path_photos==path_export:
-            PhotoScan.app.messageBox("For safety, a separate folder should be selected for the input and export folder. Please try again")
+            meta.app.messageBox("For safety, a separate folder should be selected for the input and export folder. Please try again")
         elif len(os.listdir(path_photos))<1:
-            PhotoScan.app.messageBox("A folder wasn't selected for the input folder or the input folder had no photos. Exiting script")
+            meta.app.messageBox("A folder wasn't selected for the input folder or the input folder had no photos. Exiting script")
             return False
         else:
             tmp=os.listdir(path_photos)
             if len(tmp)==1 and (("jpg" or "jpeg") in tmp[0].lower()):
-                PhotoScan.app.messageBox("Only one photo was found. If there were more photos please restart and click the folder rather than a photo. Otherwise ignore this message.")
+                meta.app.messageBox("Only one photo was found. If there were more photos please restart and click the folder rather than a photo. Otherwise ignore this message.")
             break
-    
-    #processing parameters
+    #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    #processing parameters - can edit the parameters here
     downscale = 1 # Photo alignment accuracy - 1 is "high" not "highest"
     generic_preselection = True  
     keypoints = 40000 #align photos key point limit
     tiepoints = 10000 #align photos tie point limit
     threshold=0.5
-
+    #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     fold_list = os.listdir(path_photos)
     for folder in fold_list:
         if not os.path.isfile(folder):
@@ -47,7 +48,7 @@ def main():
             for photo in image_list:
                 if ("jpg" or "jpeg") in photo.lower():
                     photo_list.append(os.path.join(folderPath,photo))
-            doc = PhotoScan.Document()
+            doc = meta.Document()
             doc.save(path_export+divider+folder+".psx")
             chunk=doc.addChunk() 
             chunk.addPhotos(photo_list)
@@ -78,14 +79,14 @@ def main():
                     else:
                         continue
             #Points outside the region were removed. Read reprojection error and delete any 0.5 or greater
-            f = PhotoScan.PointCloud.Filter()
-            f.init(chunk, criterion=PhotoScan.PointCloud.Filter.ReprojectionError)
+            f = meta.PointCloud.Filter()
+            f.init(chunk, criterion=meta.PointCloud.Filter.ReprojectionError)
             f.removePoints(threshold)
             doc.save()
     return True
 
 if __name__=="__main__":
-    PhotoScan.app.addMenuItem("Custom menu/Process 1", main)
+    meta.app.addMenuItem("Custom menu/Process 1", main)
     global divider
     divider=""
     for i in range (1, len(sys.argv)):
@@ -97,10 +98,10 @@ if __name__=="__main__":
         if arg=="windows":
             divider="\\"
     if divider=="":
-        PhotoScan.app.messageBox("In the arguments box type mac or windows based on which file system you are on")
+        meta.app.messageBox("In the arguments box type mac or windows based on which file system you are on")
     else:
         t0 = time.time()
         flag=main()
         t1 = time.time()
         if flag:
-            PhotoScan.app.messageBox("Completed in "+str(int(t1-t0))+"seconds. Now define points & set scale bar distance before running optandbuild.py")
+            meta.app.messageBox("Completed in "+str(int(t1-t0))+"seconds. Now define points & set scale bar distance before running optandbuild.py")

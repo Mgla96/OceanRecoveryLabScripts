@@ -1,5 +1,6 @@
 import os
-import PhotoScan
+import Metashape as meta
+#import photoscan
 import math, time
 import sys
 '''
@@ -11,37 +12,38 @@ def main():
 	#prompting for path to photos
 	path_photos,path_export="",""
 	while True:
-		PhotoScan.app.messageBox("Specify Input Photo Folder(containing all alignanddelete metashape files):")
-		path_photos = PhotoScan.app.getExistingDirectory("Specify Input Photo Folder(containing all alignanddelete metashape files):")
-		PhotoScan.app.messageBox("Specify EXPORT folder")
-		path_export = PhotoScan.app.getExistingDirectory("Specify EXPORT folder:")
+		meta.app.messageBox("Specify Input Photo Folder(containing all alignanddelete metashape files):")
+		path_photos = meta.app.getExistingDirectory("Specify Input Photo Folder(containing all alignanddelete metashape files):")
+		meta.app.messageBox("Specify EXPORT folder")
+		path_export = meta.app.getExistingDirectory("Specify EXPORT folder:")
 		if path_photos=="" or path_export=="":
-			PhotoScan.app.messageBox("input or export folder wasn't selected. Exiting script")
+			meta.app.messageBox("input or export folder wasn't selected. Exiting script")
 			return False
 		elif len(os.listdir(path_photos))<1:
-			PhotoScan.app.messageBox("A folder wasn't selected for the input folder or the input folder had no photos. Exiting script")
+			meta.app.messageBox("A folder wasn't selected for the input folder or the input folder had no photos. Exiting script")
 			return False
 		else:
 			tmp=os.listdir(path_photos)
 			if len(tmp)==1 and (("jpg" or "jpeg") in tmp[0].lower()):
-				PhotoScan.app.messageBox("Only one photo was found. If there were more photos please restart and click the folder rather than a photo. Otherwise ignore this message.")
+				meta.app.messageBox("Only one photo was found. If there were more photos please restart and click the folder rather than a photo. Otherwise ignore this message.")
 			break
-
-	#custom settings
-	surface = PhotoScan.SurfaceType.Arbitrary #build mesh surface type
+	#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    #processing parameters - can edit the parameters here
+	surface = meta.SurfaceType.Arbitrary #build mesh surface type
 	downscale = 2 # Photo alignment accuracy - 2 is "high quality" (want high quality not ultra high quality)
-	filtering = PhotoScan.FilterMode.MildFiltering #depth filtering
-	interpolation = PhotoScan.Interpolation.EnabledInterpolation #build mesh interpolation
-	face_num = PhotoScan.FaceCount.HighFaceCount #build mesh polygon count
-	mapping = PhotoScan.MappingMode.GenericMapping #build texture mapping
+	filtering = meta.FilterMode.MildFiltering #depth filtering
+	interpolation = meta.Interpolation.EnabledInterpolation #build mesh interpolation
+	face_num = meta.FaceCount.HighFaceCount #build mesh polygon count
+	mapping = meta.MappingMode.GenericMapping #build texture mapping
 	atlas_size = 8192
-	blending = PhotoScan.BlendingMode.MosaicBlending #blending mode
-
+	blending = meta.BlendingMode.MosaicBlending #blending mode
+	volumetric_masks = True
+	#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	fold_list = os.listdir(path_photos)
 	for folder in fold_list:
-		print(folder)	
+		#print(folder)	
 		if "psx" in folder.lower():
-			doc = PhotoScan.app.document
+			doc = meta.app.document
 			doc.open(path_photos+divider+folder) 
 			chunk=doc.chunk
 			#optimize cameras
@@ -68,24 +70,24 @@ def main():
 					else:
 						continue
 			#Read reprojection Error and delete any 0.5 or greater
-			f = PhotoScan.PointCloud.Filter()
-			f.init(chunk, criterion=PhotoScan.PointCloud.Filter.ReprojectionError)
+			f = meta.PointCloud.Filter()
+			f.init(chunk, criterion=meta.PointCloud.Filter.ReprojectionError)
 			f.removePoints(0.5)
 			#building dense cloud
 			chunk.buildDepthMaps(downscale = downscale, filter_mode = filtering)
 			chunk.buildDenseCloud(point_colors = True)
 			#building mesh
-			chunk.buildModel(surface_type = surface, interpolation = interpolation, face_count = face_num)
+			chunk.buildModel(surface_type = surface, interpolation = interpolation, face_count = face_num, volumetric_masks=volumetric_masks)
 			#build texture
 			chunk.buildUV(mapping_mode = mapping, page_count = 1)
 			chunk.buildTexture(blending_mode = blending , texture_size = atlas_size)
-			PhotoScan.app.update()
+			meta.app.update()
 			doc.save(path_export+divider+folder+".psx")
 		else:
 			continue
 
 if __name__=="__main__":
-	PhotoScan.app.addMenuItem("Custom menu/Process 2", main)
+	meta.app.addMenuItem("Custom menu/Process 2", main)
 	global divider
 	divider=""
 	for i in range (1, len(sys.argv)):
@@ -97,12 +99,12 @@ if __name__=="__main__":
 		if arg=="windows":
 			divider="\\"
 	if divider=="":
-		PhotoScan.app.messageBox("In the arguments box type mac or windows based on which file system you are on")
+		meta.app.messageBox("In the arguments box type mac or windows based on which file system you are on")
 	else:
 		t0 = time.time()
 		flag=main()
 		t1 = time.time()
 		if flag:
-			PhotoScan.app.messageBox("Completed in "+ str(int(t1-t0))+"seconds.")
+			meta.app.messageBox("Completed in "+ str(int(t1-t0))+"seconds.")
 
 			
