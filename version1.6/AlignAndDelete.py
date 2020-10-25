@@ -10,7 +10,6 @@ This script will create a new chunk add and align photos, create tie points, est
 Then it will also delete pixels above a 0.5 reprojection error. Then this script will export these updated files to the user's designated location. 
 '''
 
-
 def promptPath():
     '''
     Initial prompt for path to photos and export folder
@@ -46,11 +45,11 @@ def promptPath():
 def main():
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     # processing parameters - can edit the parameters here
-    downscale = 1  # Photo alignment accuracy - 1 is "high" not "highest"
-    generic_preselection = True
-    keypoints = 40000  # align photos key point limit
-    tiepoints = 10000  # align photos tie point limit
-    threshold = 0.5
+    DOWNSCALE = 1  # Photo alignment accuracy - 1 is "high" not "highest"
+    GENERIC_PRESELECTION = True
+    KEYPOINTS = 40000  # align photos key point limit
+    TIEPOINTS = 10000  # align photos tie point limit
+    THRESHOLD = 0.5
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     # get input and output folders
@@ -73,8 +72,8 @@ def main():
             chunk = doc.addChunk()
             chunk.addPhotos(photo_list)
             # align photos
-            chunk.matchPhotos(downscale=downscale, generic_preselection=generic_preselection,
-                              filter_mask=False, keypoint_limit=keypoints, tiepoint_limit=tiepoints)
+            chunk.matchPhotos(downscale=DOWNSCALE, generic_preselection=GENERIC_PRESELECTION,
+                              filter_mask=False, keypoint_limit=KEYPOINTS, tiepoint_limit=TIEPOINTS)
             chunk.alignCameras()
             # Removing points outside bounding box
             chunk = doc.chunks[-1]
@@ -102,7 +101,7 @@ def main():
             # Points outside the region were removed. Read reprojection error and delete any 0.5 or greater
             f = meta.PointCloud.Filter()
             f.init(chunk, criterion=meta.PointCloud.Filter.ReprojectionError)
-            f.removePoints(threshold)
+            f.removePoints(THRESHOLD)
             doc.save()
     return True
 

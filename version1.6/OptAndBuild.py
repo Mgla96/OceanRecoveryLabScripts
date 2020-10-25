@@ -10,7 +10,6 @@ This script will optimize cameras, delete other points outside bounding box, bui
 Then it will repeat this process for all coral treatments.
 '''
 
-
 def promptPath():
     '''
     Initial prompt for path to photos and export folder
@@ -43,23 +42,22 @@ def promptPath():
 def main():
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     # processing parameters - can edit the parameters here
-    surface = meta.SurfaceType.Arbitrary  # build mesh surface type
-    # Photo alignment accuracy - 2 is "high quality" (want high quality not ultra high quality)
-    downscale = 2
-    filtering = meta.FilterMode.MildFiltering  # depth filtering
-    interpolation = meta.Interpolation.EnabledInterpolation  # build mesh interpolation
-    face_num = meta.FaceCount.HighFaceCount  # build mesh polygon count
-    mapping = meta.MappingMode.GenericMapping  # build texture mapping
-    atlas_size = 8192
-    blending = meta.BlendingMode.MosaicBlending  # blending mode
-    volumetric_masks = True
+    SURFACE = meta.SurfaceType.Arbitrary  # build mesh surface type
+    DOWNSCALE = 2 # Photo alignment accuracy - 2 is "high quality" (want high quality not ultra high quality)
+    FILTERING = meta.FilterMode.MildFiltering  # depth filtering
+    INTERPOLATION = meta.Interpolation.EnabledInterpolation  # build mesh interpolation
+    FACE_NUM = meta.FaceCount.HighFaceCount  # build mesh polygon count
+    MAPPING = meta.MappingMode.GenericMapping  # build texture mapping
+    ATLAS_SIZE = 8192
+    BLENDING = meta.BlendingMode.MosaicBlending  # blending mode
+    VOLUMETRIC_MASKS = True
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     # get input and output folders
     path_photos, path_export = promptPath()
     if path_photos == "" or path_export == "":
         return False
-
+    
     # get all psx files
     psx_list = filter(lambda x: x.lower()
                       [-3::] == 'psx', os.listdir(path_photos))
@@ -96,14 +94,14 @@ def main():
         f.init(chunk, criterion=meta.PointCloud.Filter.ReprojectionError)
         f.removePoints(0.5)
         # building dense cloud
-        chunk.buildDepthMaps(downscale=downscale, filter_mode=filtering)
+        chunk.buildDepthMaps(downscale=DOWNSCALE, filter_mode=FILTERING)
         chunk.buildDenseCloud(point_colors=True)
         # building mesh
-        chunk.buildModel(surface_type=surface, interpolation=interpolation,
-                         face_count=face_num, volumetric_masks=volumetric_masks)
+        chunk.buildModel(surface_type=SURFACE, interpolation=INTERPOLATION,
+                         face_count=FACE_NUM, volumetric_masks=VOLUMETRIC_MASKS)
         # build texture
-        chunk.buildUV(mapping_mode=mapping, page_count=1)
-        chunk.buildTexture(blending_mode=blending, texture_size=atlas_size)
+        chunk.buildUV(mapping_mode=MAPPING, page_count=1)
+        chunk.buildTexture(blending_mode=BLENDING, texture_size=ATLAS_SIZE)
         meta.app.update()
         doc.save(path_export+divider+psx+".psx")
 
