@@ -21,4 +21,9 @@ optandbuild will be called after the user defines points and set scale bar dista
 
 ### Instructions
 * Select folder consisting of updated coral treatments that was made from alignanddelete.py
+    * This folder should have the metashape files in it
+* Select folder where you would like to place all the updated coral treatments
 
+<p align="center">
+<img src="OptAndBuildDemo.gif" width="50%" alt="gif">
+</p>

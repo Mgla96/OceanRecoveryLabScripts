@@ -10,6 +10,7 @@ This script will optimize cameras, delete other points outside bounding box, bui
 Then it will repeat this process for all coral treatments.
 '''
 
+
 def promptPath():
     '''
     Initial prompt for path to photos and export folder
@@ -17,24 +18,27 @@ def promptPath():
     path_photos, path_export = "", ""
     while True:
         meta.app.messageBox(
-            "Specify Input Photo Folder(containing all alignanddelete metashape files):")
+            "Select Input folder(folder containing all metashape files:")
         path_photos = meta.app.getExistingDirectory(
-            "Specify Input Photo Folder(containing all alignanddelete metashape files):")
-        meta.app.messageBox("Specify EXPORT folder")
-        path_export = meta.app.getExistingDirectory("Specify EXPORT folder:")
+            "Select Input folder(folder containing all metashape files:")
+        meta.app.messageBox("Select Export folder")
+        path_export = meta.app.getExistingDirectory("Select Export folder:")
         if path_photos == "" or path_export == "":
+            print("input or export folder wasn't selected. Exiting script")
             meta.app.messageBox(
                 "input or export folder wasn't selected. Exiting script")
             return "", ""
         elif len(os.listdir(path_photos)) < 1:
+            print("Folder not selected for input folder or input folder had no photos. Exiting script")
             meta.app.messageBox(
-                "A folder wasn't selected for the input folder or the input folder had no photos. Exiting script")
+                "Folder not selected for input folder or input folder had no photos. Exiting script")
             return "", ""
         else:
             tmp = os.listdir(path_photos)
             if len(tmp) == 1 and (("jpg" or "jpeg") in tmp[0].lower()):
+                print("Only 1 photo found. If true ignore message otherwise restart and select the folder rather than a photo")
                 meta.app.messageBox(
-                    "Only one photo was found. If there were more photos please restart and click the folder rather than a photo. Otherwise ignore this message.")
+                    "Only 1 photo found. If true ignore message otherwise restart and select the folder rather than a photo")
             break
     return path_photos, path_export
 
@@ -43,7 +47,8 @@ def main():
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     # processing parameters - can edit the parameters here
     SURFACE = meta.SurfaceType.Arbitrary  # build mesh surface type
-    DOWNSCALE = 2 # Photo alignment accuracy - 2 is "high quality" (want high quality not ultra high quality)
+    # Photo alignment accuracy - 2 is "high quality" (want high quality not ultra high quality)
+    DOWNSCALE = 2
     FILTERING = meta.FilterMode.MildFiltering  # depth filtering
     INTERPOLATION = meta.Interpolation.EnabledInterpolation  # build mesh interpolation
     FACE_NUM = meta.FaceCount.HighFaceCount  # build mesh polygon count
@@ -57,7 +62,7 @@ def main():
     path_photos, path_export = promptPath()
     if path_photos == "" or path_export == "":
         return False
-    
+
     # get all psx files
     psx_list = filter(lambda x: x.lower()
                       [-3::] == 'psx', os.listdir(path_photos))

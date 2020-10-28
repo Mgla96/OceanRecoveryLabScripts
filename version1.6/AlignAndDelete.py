@@ -10,6 +10,7 @@ This script will create a new chunk add and align photos, create tie points, est
 Then it will also delete pixels above a 0.5 reprojection error. Then this script will export these updated files to the user's designated location. 
 '''
 
+
 def promptPath():
     '''
     Initial prompt for path to photos and export folder
@@ -17,27 +18,31 @@ def promptPath():
     path_photos, path_export = "", ""
     while True:
         meta.app.messageBox(
-            "Specify Input Photo folder(folder containing all metashape files)")
+            "Select Input Photo Folder containing image files:")
         path_photos = meta.app.getExistingDirectory(
-            "Specify INPUT photo folder(folder containing all metashape files):")
-        meta.app.messageBox("Specify Export Folder")
-        path_export = meta.app.getExistingDirectory("Specify EXPORT folder:")
+            "Select Input Photo Folder containing image files:")
+        meta.app.messageBox("Select Export Folder")
+        path_export = meta.app.getExistingDirectory("Select Export folder:")
         if path_photos == "" or path_export == "":
+            print("input or export folder wasn't selected. Exiting script")
             meta.app.messageBox(
                 "input or export folder wasn't selected. Exiting script")
             return "", ""
         elif path_photos == path_export:
+            print("Separate folder should be selected for input and export folder")
             meta.app.messageBox(
-                "For safety, a separate folder should be selected for the input and export folder. Please try again")
+                "Separate folder should be selected for input and export folder")
         elif len(os.listdir(path_photos)) < 1:
+            print("Folder not selected for input folder or input folder had no photos. Exiting script")
             meta.app.messageBox(
-                "A folder wasn't selected for the input folder or the input folder had no photos. Exiting script")
+                "Folder not selected for input folder or input folder had no photos. Exiting script")
             return "", ""
         else:
             tmp = os.listdir(path_photos)
             if len(tmp) == 1 and (("jpg" or "jpeg") in tmp[0].lower()):
+                print("Only 1 photo found. If true ignore message otherwise restart and select the folder rather than a photo")
                 meta.app.messageBox(
-                    "Only one photo was found. If there were more photos please restart and click the folder rather than a photo. Otherwise ignore this message.")
+                    "Only 1 photo found. If true ignore message otherwise restart and select the folder rather than a photo")
             break
     return path_photos, path_export
 
