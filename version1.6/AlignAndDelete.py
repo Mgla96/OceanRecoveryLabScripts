@@ -72,7 +72,7 @@ def main():
                 continue
             image_list = os.listdir(folderPath)
             photo_list = list()  # []
-            print(image_list)
+            #print(image_list)
             for photo in image_list:
                 # print(photo)
                 if ("jpg" or "jpeg") in photo.lower():
