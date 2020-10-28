@@ -1,6 +1,5 @@
 import os
 import Metashape as meta
-#import photoscan
 import math
 import time
 import sys
@@ -33,14 +32,16 @@ def promptPath():
             meta.app.messageBox(
                 "Separate folder should be selected for input and export folder")
         elif len(os.listdir(path_photos)) < 1:
-            print("Folder not selected for input folder or input folder had no photos. Exiting script")
+            print(
+                "Folder not selected for input folder or input folder had no photos. Exiting script")
             meta.app.messageBox(
                 "Folder not selected for input folder or input folder had no photos. Exiting script")
             return "", ""
         else:
             tmp = os.listdir(path_photos)
             if len(tmp) == 1 and (("jpg" or "jpeg") in tmp[0].lower()):
-                print("Only 1 photo found. If true ignore message otherwise restart and select the folder rather than a photo")
+                print(
+                    "Only 1 photo found. If true ignore message otherwise restart and select the folder rather than a photo")
                 meta.app.messageBox(
                     "Only 1 photo found. If true ignore message otherwise restart and select the folder rather than a photo")
             break
@@ -67,11 +68,19 @@ def main():
         if not os.path.isfile(folder):
             # loading images
             folderPath = path_photos + divider + folder
+            if os.path.isfile(folderPath):  # skip because it should be folder not file
+                continue
             image_list = os.listdir(folderPath)
-            photo_list = list()
+            photo_list = list()  # []
+            print(image_list)
             for photo in image_list:
+                # print(photo)
                 if ("jpg" or "jpeg") in photo.lower():
                     photo_list.append(os.path.join(folderPath, photo))
+            # only runs program on folder with photos in it (photo_list in chunk.addPhotos(photo_list) can't be empty)
+            if not photo_list:
+                print("found non photo folder")
+                continue
             doc = meta.Document()
             doc.save(path_export+divider+folder+".psx")
             chunk = doc.addChunk()

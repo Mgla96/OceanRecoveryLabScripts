@@ -1,6 +1,5 @@
 import os
 import Metashape as meta
-#import photoscan
 import math
 import time
 import sys
@@ -29,14 +28,16 @@ def promptPath():
                 "input or export folder wasn't selected. Exiting script")
             return "", ""
         elif len(os.listdir(path_photos)) < 1:
-            print("Folder not selected for input folder or input folder had no photos. Exiting script")
+            print(
+                "Folder not selected for input folder or input folder had no photos. Exiting script")
             meta.app.messageBox(
                 "Folder not selected for input folder or input folder had no photos. Exiting script")
             return "", ""
         else:
             tmp = os.listdir(path_photos)
             if len(tmp) == 1 and (("jpg" or "jpeg") in tmp[0].lower()):
-                print("Only 1 photo found. If true ignore message otherwise restart and select the folder rather than a photo")
+                print(
+                    "Only 1 photo found. If true ignore message otherwise restart and select the folder rather than a photo")
                 meta.app.messageBox(
                     "Only 1 photo found. If true ignore message otherwise restart and select the folder rather than a photo")
             break
