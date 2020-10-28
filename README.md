@@ -17,7 +17,7 @@ alignanddelete will take a folder directory and loop through it's subfolders of 
 * Select folder where you would like to place all the updated coral treatments
 
 <p align="center">
-<img src="AlignAndDelete.gif" width="80%" alt="gif">
+<img src="AlignAndDeleteDemo.gif" width="80%" alt="gif">
 </p>
 
 ## optandbuild.py
