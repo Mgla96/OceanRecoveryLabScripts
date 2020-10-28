@@ -3,7 +3,7 @@ Metashape Scripts to assist researchers at the Ocean Recoveries Lab at UC Santa 
 
 
 <p align="center">
-<img src="https://media.giphy.com/media/3og0IMh7rRNPtNSK9q/giphy.gif" width="80%" alt="gif">
+<img src="https://media.giphy.com/media/3og0IMh7rRNPtNSK9q/giphy.gif" width="50%" alt="gif">
 </p>
 
 
@@ -25,5 +25,5 @@ optandbuild will be called after the user defines points and set scale bar dista
 * Select folder where you would like to place all the updated coral treatments
 
 <p align="center">
-<img src="OptAndBuildDemo.gif" width="50%" alt="gif">
+<img src="OptAndBuildDemo.gif" width="80%" alt="gif">
 </p>
