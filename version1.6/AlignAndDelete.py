@@ -70,8 +70,7 @@ def main():
             folderPath = path_photos + divider + folder
             if os.path.isfile(folderPath):  # skip because it should be folder not file
                 continue
-            image_list = os.listdir(folderPath)
-            photo_list = list()  # []
+            image_list,photo_list = os.listdir(folderPath),[] 
             #print(image_list)
             for photo in image_list:
                 # print(photo)
