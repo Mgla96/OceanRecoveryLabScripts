@@ -64,6 +64,7 @@ def main():
         return False
 
     fold_list = os.listdir(path_photos)
+    fold_list = filter(lambda x:x[0]!='.',fold_list) #getting rid of pesky files like .DS_Store
     for folder in fold_list:
         if not os.path.isfile(folder):
             # loading images
@@ -71,6 +72,7 @@ def main():
             if os.path.isfile(folderPath):  # skip because it should be folder not file
                 continue
             image_list,photo_list = os.listdir(folderPath),[] 
+            image_list = filter(lambda x:x[0]!='.',image_list) #getting rid of pesky files like .DS_Store
             #print(image_list)
             for photo in image_list:
                 # print(photo)
