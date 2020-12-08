@@ -50,6 +50,7 @@ def main():
     SURFACE = meta.SurfaceType.Arbitrary  # build mesh surface type
     # Photo alignment accuracy - 2 is "high quality" (want high quality not ultra high quality)
     DOWNSCALE = 2
+    #DOWNSCALE = 64
     FILTERING = meta.FilterMode.MildFiltering  # depth filtering
     INTERPOLATION = meta.Interpolation.EnabledInterpolation  # build mesh interpolation
     FACE_NUM = meta.FaceCount.HighFaceCount  # build mesh polygon count
@@ -94,8 +95,7 @@ def main():
                     point.valid = False
                 else:
                     continue
-        #saving
-        doc.save(path_export+divider+psx+".psx")
+
         # Read reprojection Error and delete any 0.5 or greater
         f = meta.PointCloud.Filter()
         f.init(chunk, criterion=meta.PointCloud.Filter.ReprojectionError)
@@ -103,20 +103,39 @@ def main():
         # building dense cloud
         chunk.buildDepthMaps(downscale=DOWNSCALE, filter_mode=FILTERING)
         chunk.buildDenseCloud(point_colors=True)
-        #saving
-        doc.save(path_export+divider+psx+".psx") 
+        # saving
+        try:
+            doc.save(path_export+divider+psx)
+            doc.open(path_export+divider+psx)
+            chunk = doc.chunk
+
+        except RuntimeError as r_err:
+            Metashape.app.messageBox(
+                "Can't save project after dense cloud:", r_err)
+
         # building mesh
         chunk.buildModel(surface_type=SURFACE, interpolation=INTERPOLATION,
                          face_count=FACE_NUM, volumetric_masks=VOLUMETRIC_MASKS)
-        #saving
-        doc.save(path_export+divider+psx+".psx") 
+        # saving
+        try:
+            doc.save(path_export+divider+psx)
+            doc.open(path_export+divider+psx)
+            chunk = doc.chunk
+
+        except RuntimeError as r_err:
+            Metashape.app.messageBox(
+                "Can't save project after build model:", r_err)
+
         # build texture
         chunk.buildUV(mapping_mode=MAPPING, page_count=1)
         chunk.buildTexture(blending_mode=BLENDING, texture_size=ATLAS_SIZE)
-        meta.app.update()
-        #saving
-        doc.save(path_export+divider+psx+".psx")
-
+        # meta.app.update()
+        # saving
+        try:
+            doc.save(path_export+divider+psx)
+        except RuntimeError as r_err:
+            Metashape.app.messageBox(
+                "Can't save project after build texture:", r_err)
     return True
 
 
