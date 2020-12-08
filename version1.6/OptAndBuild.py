@@ -50,7 +50,6 @@ def main():
     SURFACE = meta.SurfaceType.Arbitrary  # build mesh surface type
     # Photo alignment accuracy - 2 is "high quality" (want high quality not ultra high quality)
     DOWNSCALE = 2
-    #DOWNSCALE = 64
     FILTERING = meta.FilterMode.MildFiltering  # depth filtering
     INTERPOLATION = meta.Interpolation.EnabledInterpolation  # build mesh interpolation
     FACE_NUM = meta.FaceCount.HighFaceCount  # build mesh polygon count
@@ -123,7 +122,7 @@ def main():
             chunk = doc.chunk
 
         except RuntimeError as r_err:
-            message=psx+": Can't save project after build model: ", r_err
+            message=psx+": Can't save project after build model: "+r_err
             Metashape.app.messageBox(message)
 
         # build texture
