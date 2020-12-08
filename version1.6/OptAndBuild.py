@@ -110,8 +110,8 @@ def main():
             chunk = doc.chunk
 
         except RuntimeError as r_err:
-            Metashape.app.messageBox(
-                "Can't save project after dense cloud:", r_err)
+            message=psx+": Can't save project after dense cloud: "+r_err
+            Metashape.app.messageBox(message)
 
         # building mesh
         chunk.buildModel(surface_type=SURFACE, interpolation=INTERPOLATION,
@@ -123,8 +123,8 @@ def main():
             chunk = doc.chunk
 
         except RuntimeError as r_err:
-            Metashape.app.messageBox(
-                "Can't save project after build model:", r_err)
+            message=psx+": Can't save project after build model: ", r_err
+            Metashape.app.messageBox(message)
 
         # build texture
         chunk.buildUV(mapping_mode=MAPPING, page_count=1)
@@ -134,8 +134,8 @@ def main():
         try:
             doc.save(path_export+divider+psx)
         except RuntimeError as r_err:
-            Metashape.app.messageBox(
-                "Can't save project after build texture:", r_err)
+            message=psx+": Can't save project after build texture: "+r_err
+            Metashape.app.messageBox(message)
     return True
 
 
