@@ -58,7 +58,6 @@ def main():
     BLENDING = meta.BlendingMode.MosaicBlending  # blending mode
     VOLUMETRIC_MASKS = True
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
     # get input and output folders
     path_photos, path_export = promptPath()
     if path_photos == "" or path_export == "":
@@ -95,6 +94,8 @@ def main():
                     point.valid = False
                 else:
                     continue
+        #saving
+        doc.save(path_export+divider+psx+".psx")
         # Read reprojection Error and delete any 0.5 or greater
         f = meta.PointCloud.Filter()
         f.init(chunk, criterion=meta.PointCloud.Filter.ReprojectionError)
@@ -102,13 +103,18 @@ def main():
         # building dense cloud
         chunk.buildDepthMaps(downscale=DOWNSCALE, filter_mode=FILTERING)
         chunk.buildDenseCloud(point_colors=True)
+        #saving
+        doc.save(path_export+divider+psx+".psx") 
         # building mesh
         chunk.buildModel(surface_type=SURFACE, interpolation=INTERPOLATION,
                          face_count=FACE_NUM, volumetric_masks=VOLUMETRIC_MASKS)
+        #saving
+        doc.save(path_export+divider+psx+".psx") 
         # build texture
         chunk.buildUV(mapping_mode=MAPPING, page_count=1)
         chunk.buildTexture(blending_mode=BLENDING, texture_size=ATLAS_SIZE)
         meta.app.update()
+        #saving
         doc.save(path_export+divider+psx+".psx")
 
     return True
