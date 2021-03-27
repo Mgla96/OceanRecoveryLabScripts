@@ -41,4 +41,4 @@ opt_and_build will be called after the user defines points and set scale bar dis
 
 ## logging
 
-logs will be generated for debugging and are located in the same folder as these python scripts.
+logs will be generated for debugging and will be found in the same folder as the python script that is run.
