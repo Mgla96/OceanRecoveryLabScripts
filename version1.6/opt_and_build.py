@@ -153,9 +153,8 @@ def main() -> bool:
         f.init(chunk, criterion=meta.PointCloud.Filter.ReprojectionError)
         f.removePoints(0.5)
 
-        # building dense cloud
         try:
-
+            # building dense cloud
             chunk.buildDepthMaps(downscale=DOWNSCALE, filter_mode=FILTERING)
             chunk.buildDenseCloud(point_colors=True)
             # saving
@@ -166,13 +165,11 @@ def main() -> bool:
             logger.info(message)
 
         except RuntimeError as r_err:
-            message = psx + ": Can't save project after dense cloud: " + str(r_err)
+            message = psx + ": error during dense cloud: " + str(r_err)
             print(message)
             logger.error(message)
             # issue with this project so moving to next
             continue
-
-        # building mesh
 
         # building mesh
         try:
@@ -188,7 +185,7 @@ def main() -> bool:
             message = psx + ": saved after build model"
             logger.info(message)
         except RuntimeError as r_err:
-            message = psx + ": Can't save project after build model: " + str(r_err)
+            message = psx + ": error during build model: " + str(r_err)
             print(message)
             logger.error(message)
             continue
@@ -204,7 +201,7 @@ def main() -> bool:
             logging.info(message)
 
         except RuntimeError as r_err:
-            message = psx + ": Can't save project after build texture: " + str(r_err)
+            message = psx + ": error during build texture: " + str(r_err)
             print(message)
             logging.error(message)
 
