@@ -108,14 +108,26 @@ def main() -> bool:
     bool
         False if issue with photo paths and True if opt and build completed
     """
-    logging.info("starting opt_and_build")
     # get input and output folders
     path_photos, path_export = prompt_path()
     if path_photos == "" or path_export == "":
         return False
 
+    # create logger
+    logger = logging.getLogger()
+    logger.handlers.clear()
+    f_handler = logging.FileHandler(
+        filename=path_photos + "/opt_and_build.log", mode="a"
+    )
+    f_formatter = logging.Formatter("%(asctime)s - %(levelname)s - %(message)s")
+    f_handler.setFormatter(f_formatter)
+    logger.setLevel(logging.DEBUG)
+    logger.addHandler(f_handler)
+
     # get all psx files
     psx_list = filter(lambda x: x.lower()[-3::] == "psx", os.listdir(path_photos))
+
+    logger.info("starting opt_and_build")
 
     for psx in psx_list:
         doc = meta.app.document
@@ -198,25 +210,17 @@ def main() -> bool:
             doc.save(path_export + divider + psx)
             print("saved ", psx, " after build texture")
             message = psx + ": saved after build texture"
-            logging.info(message)
+            logger.info(message)
 
         except RuntimeError as r_err:
             message = psx + ": error during build texture: " + str(r_err)
             print(message)
-            logging.error(message)
+            logger.error(message)
 
     return True
 
 
 if __name__ == "__main__":
-    # create logger
-    logger = logging.getLogger()
-    logger.handlers.clear()
-    f_handler = logging.FileHandler(filename="opt_and_build.log", mode="a")
-    f_formatter = logging.Formatter("%(asctime)s - %(levelname)s - %(message)s")
-    f_handler.setFormatter(f_formatter)
-    logger.addHandler(f_handler)
-
     global divider
     divider = ""
 
@@ -253,6 +257,5 @@ if __name__ == "__main__":
         total_time = int(t1 - t0)
         if flag:
             message = "Completed in " + str(total_time) + " seconds."
-            meta.app.messageBox("Completed in " + total_time + " seconds.")
+            meta.app.messageBox(message)
             print("Completed in", str(total_time), "seconds")
-            logger.info(message)

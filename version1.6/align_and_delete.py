@@ -106,15 +106,29 @@ def main() -> bool:
     bool
         False if issue with photo paths and True if align and delete completed
     """
-    logging.info("starting align_and_delete")
-    # get input and output folders
+
     path_photos, path_export = prompt_path()
 
     if path_photos == "" or path_export == "":
         return False
 
+    # logging
+    logger = logging.getLogger()
+    logger.handlers.clear()
+    f_formatter = logging.Formatter("%(asctime)s - %(levelname)s - %(message)s")
+    f_handler = logging.FileHandler(
+        filename=path_photos + "/align_and_delete.log", mode="a"
+    )
+    f_handler.setFormatter(f_formatter)
+    logger.addHandler(f_handler)
+    logger.setLevel(logging.DEBUG)
+
     # get rid of pesky files like .DS_Store
-    fold_list = filter(lambda x: x[0] != ".", os.listdir(path_photos))
+    fold_list = filter(
+        lambda x: x[0] != "." and x[-3:] != "log", os.listdir(path_photos)
+    )
+
+    logger.info("starting align_and_delete")
 
     for folder in fold_list:
         if not os.path.isfile(folder):
@@ -179,21 +193,14 @@ def main() -> bool:
                 f.removePoints(THRESHOLD)
                 doc.save()
                 print("completed align_and_delete for:", folder)
-                logging.info(folder + ": completed align_and_delete")
+                logger.info(folder + ": completed align_and_delete")
+
             except RuntimeError as r_err:
                 logger.error(folder + ": " + str(r_err))
     return True
 
 
 if __name__ == "__main__":
-    # create logger
-    logger = logging.getLogger()
-    logger.handlers.clear()
-    f_handler = logging.FileHandler(filename="align_and_delete.log", mode="a")
-    f_formatter = logging.Formatter("%(asctime)s - %(levelname)s - %(message)s")
-    f_handler.setFormatter(f_formatter)
-    logger.addHandler(f_handler)
-
     global divider
     divider = ""
 
@@ -240,4 +247,3 @@ if __name__ == "__main__":
                 total_time,
                 "seconds.\nNow define points & set scale bar distance before running optandbuild.py",
             )
-            logger.info(message)
