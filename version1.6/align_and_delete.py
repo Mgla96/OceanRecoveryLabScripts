@@ -22,7 +22,6 @@ KEYPOINTS = 40000  # align photos key point limit
 TIEPOINTS = 10000  # align photos tie point limit
 THRESHOLD = 0.5
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-DOWNSCALE = 64
 
 
 def prompt_path() -> Tuple[str, str]:
