@@ -130,6 +130,7 @@ def main() -> bool:
     logger.info("starting opt_and_build")
 
     for psx in psx_list:
+        logger.info(psx)
         doc = meta.app.document
         doc.open(path_photos + divider + psx)
         chunk = doc.chunk
@@ -143,7 +144,7 @@ def main() -> bool:
         size = chunk.region.size
         if not (chunk.point_cloud and chunk.enabled):
             continue
-        elif not len(chunk.point_cloud.points):
+        elif not chunk.point_cloud.points:
             continue
         for point in chunk.point_cloud.points:
             if point.valid:

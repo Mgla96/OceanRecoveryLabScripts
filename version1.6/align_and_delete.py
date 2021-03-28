@@ -125,12 +125,14 @@ def main() -> bool:
 
     # get rid of pesky files like .DS_Store
     fold_list = filter(
-        lambda x: x[0] != "." and x[-3:] != "log", os.listdir(path_photos)
+        lambda x: x[0] != "." and x[-3::] != "log", os.listdir(path_photos)
     )
+    print("fold_list", fold_list)
 
     logger.info("starting align_and_delete")
 
     for folder in fold_list:
+        logger.info(folder)
         if not os.path.isfile(folder):
             # loading images
             folderPath = path_photos + divider + folder
@@ -170,7 +172,7 @@ def main() -> bool:
                 size = chunk.region.size
                 if not (chunk.point_cloud and chunk.enabled):
                     continue
-                elif not len(chunk.point_cloud.points):
+                elif not chunk.point_cloud.points:
                     continue
                 for point in chunk.point_cloud.points:
                     if point.valid:
