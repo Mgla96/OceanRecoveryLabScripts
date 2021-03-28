@@ -40,7 +40,3 @@ opt_and_build will be called after the user defines points and set scale bar dis
 <p align="center">
 <img src="OptAndBuildDemo.gif" width="80%" alt="gif">
 </p>
-
-## logging
-
-logs will be generated for debugging and will be found in the same folder as the python script that is run.
