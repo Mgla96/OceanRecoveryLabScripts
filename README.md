@@ -17,6 +17,7 @@ align_and_delete will take a folder directory and loop through it's subfolders o
     * Program will guess the OS if no input given
 * Select folder consisting of all the coral treatments
     * Make sure this folder only has subfolders that contain photos
+    * A log file will be created in this folder for debugging
 * Select folder where you would like to place all the updated coral treatments
 
 <p align="center">
@@ -33,12 +34,9 @@ opt_and_build will be called after the user defines points and set scale bar dis
     * Program will guess the OS if no input given
 * Select folder consisting of updated coral treatments that was made from align_and_delete.py
     * This folder should have the metashape files in it
+    * A log file will be created in this folder for debugging
 * Select folder where you would like to place all the updated coral treatments
 
 <p align="center">
 <img src="OptAndBuildDemo.gif" width="80%" alt="gif">
 </p>
-
-## logging
-
-logs will be generated for debugging and are located in the same folder as these python scripts.
