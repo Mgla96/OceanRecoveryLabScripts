@@ -106,6 +106,7 @@ def main() -> bool:
     bool
         False if issue with photo paths and True if align and delete completed
     """
+
     path_photos, path_export = prompt_path()
 
     if path_photos == "" or path_export == "":
@@ -193,6 +194,7 @@ def main() -> bool:
                 doc.save()
                 print("completed align_and_delete for:", folder)
                 logger.info(folder + ": completed align_and_delete")
+
             except RuntimeError as r_err:
                 logger.error(folder + ": " + str(r_err))
     return True
