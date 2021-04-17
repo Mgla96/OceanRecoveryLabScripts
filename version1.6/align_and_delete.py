@@ -238,10 +238,10 @@ if __name__ == "__main__":
         t1 = time.time()
         total_time = int(t1 - t0)
         if flag:
-            message = "Completed in " + str(total_time) + " seconds.\nNow define points & set scale bar distance before running optandbuild.py"
-            meta.app.messageBox(
-                message
+            message = (
+                "Completed in "
+                + str(total_time)
+                + " seconds.\nNow define points & set scale bar distance before running optandbuild.py"
             )
-            print(
-                message
-            )
+            meta.app.messageBox(message)
+            print(message)
