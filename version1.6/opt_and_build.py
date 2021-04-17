@@ -117,7 +117,7 @@ def main() -> bool:
     logger = logging.getLogger()
     logger.handlers.clear()
     f_handler = logging.FileHandler(
-        filename=path_photos + "/opt_and_build.log", mode="a"
+        filename=path_photos + divider + "opt_and_build.log", mode="a"
     )
     f_formatter = logging.Formatter("%(asctime)s - %(levelname)s - %(message)s")
     f_handler.setFormatter(f_formatter)
@@ -259,4 +259,4 @@ if __name__ == "__main__":
         if flag:
             message = "Completed in " + str(total_time) + " seconds."
             meta.app.messageBox(message)
-            print("Completed in", str(total_time), "seconds")
+            print(message)

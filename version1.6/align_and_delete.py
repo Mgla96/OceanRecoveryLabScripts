@@ -117,7 +117,7 @@ def main() -> bool:
     logger.handlers.clear()
     f_formatter = logging.Formatter("%(asctime)s - %(levelname)s - %(message)s")
     f_handler = logging.FileHandler(
-        filename=path_photos + "/align_and_delete.log", mode="a"
+        filename=path_photos + divider + "align_and_delete.log", mode="a"
     )
     f_handler.setFormatter(f_formatter)
     logger.addHandler(f_handler)
@@ -238,14 +238,10 @@ if __name__ == "__main__":
         t1 = time.time()
         total_time = int(t1 - t0)
         if flag:
-            message = "Completed in " + str(total_time) + " seconds."
+            message = "Completed in " + str(total_time) + " seconds.\nNow define points & set scale bar distance before running optandbuild.py"
             meta.app.messageBox(
-                "Completed in "
-                + str(total_time)
-                + " seconds.\n Now define points & set scale bar distance before running optandbuild.py"
+                message
             )
             print(
-                "Completed in",
-                total_time,
-                "seconds.\nNow define points & set scale bar distance before running optandbuild.py",
+                message
             )
