@@ -1,6 +1,5 @@
 import os
 import Metashape as meta
-import math
 import time
 import sys
 import typing
