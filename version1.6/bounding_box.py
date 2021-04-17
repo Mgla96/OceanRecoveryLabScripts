@@ -80,8 +80,6 @@ def main() -> bool:
             return False
         elif not chunk.point_cloud.points:
             return False
-        # print(len(chunk.point_cloud.points))
-        # print(len(chunk.point_cloud.tracks))
         for point in chunk.point_cloud.points:
             if point.valid:
                 v = point.coord
