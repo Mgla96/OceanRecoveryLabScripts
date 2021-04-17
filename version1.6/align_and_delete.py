@@ -126,7 +126,6 @@ def main() -> bool:
     fold_list = filter(
         lambda x: x[0] != "." and x[-3::] != "log", os.listdir(path_photos)
     )
-    print("fold_list", fold_list)
 
     logger.info("starting align_and_delete")
 
