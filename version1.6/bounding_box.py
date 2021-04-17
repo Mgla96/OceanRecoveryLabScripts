@@ -88,13 +88,10 @@ def main() -> bool:
                 v_r = R.t() * v_c
                 if abs(v_r.x) > abs(size.x / 2.0):
                     point.valid = False
-                    ctr2 += 1
                 elif abs(v_r.y) > abs(size.y / 2.0):
                     point.valid = False
-                    ctr2 += 1
                 elif abs(v_r.z) > abs(size.z / 2.0):
                     point.valid = False
-                    ctr2 += 1
                 else:
                     continue
         doc.save()
