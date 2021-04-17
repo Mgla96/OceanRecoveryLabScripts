@@ -2,7 +2,6 @@ import os
 import Metashape as meta
 import time
 import sys
-import typing
 import logging
 from typing import Tuple
 
