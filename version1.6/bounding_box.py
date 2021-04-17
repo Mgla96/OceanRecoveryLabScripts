@@ -64,12 +64,15 @@ def main() -> bool:
 
         doc = meta.app.document
         doc.open(path_psx)
+
+        # print(len(doc.chunks))
         chunk = doc.chunk
 
         # optimize cameras
         chunk.optimizeCameras()
 
         # delete points outside bounding box
+        # https://www.agisoft.com/forum/index.php?topic=9030.0
         R = chunk.region.rot  # Bounding box rotation matrix
         C = chunk.region.center  # Bounding box center vector
         size = chunk.region.size
@@ -77,6 +80,8 @@ def main() -> bool:
             return False
         elif not chunk.point_cloud.points:
             return False
+        # print(len(chunk.point_cloud.points))
+        # print(len(chunk.point_cloud.tracks))
         for point in chunk.point_cloud.points:
             if point.valid:
                 v = point.coord
@@ -85,17 +90,16 @@ def main() -> bool:
                 v_r = R.t() * v_c
                 if abs(v_r.x) > abs(size.x / 2.0):
                     point.valid = False
+                    ctr2 += 1
                 elif abs(v_r.y) > abs(size.y / 2.0):
                     point.valid = False
+                    ctr2 += 1
                 elif abs(v_r.z) > abs(size.z / 2.0):
                     point.valid = False
+                    ctr2 += 1
                 else:
                     continue
-
-        # read reprojection Error and delete any 0.5 or greater
-        f = meta.PointCloud.Filter()
-        f.init(chunk, criterion=meta.PointCloud.Filter.ReprojectionError)
-        f.removePoints(0.5)
+        doc.save()
 
     except RuntimeError as r_err:
         message = path_psx + ": error during bounding box: " + str(r_err)

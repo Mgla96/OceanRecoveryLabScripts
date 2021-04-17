@@ -137,6 +137,7 @@ def main() -> bool:
         chunk.optimizeCameras()
 
         # delete points outside bounding box
+        # https://www.agisoft.com/forum/index.php?topic=9030.0
         R = chunk.region.rot  # Bounding box rotation matrix
         C = chunk.region.center  # Bounding box center vector
         size = chunk.region.size
