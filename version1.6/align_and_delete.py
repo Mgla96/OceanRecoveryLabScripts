@@ -1,6 +1,5 @@
 import os
 import Metashape as meta
-import math
 import time
 import sys
 import typing
@@ -117,7 +116,7 @@ def main() -> bool:
     logger.handlers.clear()
     f_formatter = logging.Formatter("%(asctime)s - %(levelname)s - %(message)s")
     f_handler = logging.FileHandler(
-        filename=path_photos + "/align_and_delete.log", mode="a"
+        filename=path_photos + divider + "align_and_delete.log", mode="a"
     )
     f_handler.setFormatter(f_formatter)
     logger.addHandler(f_handler)
@@ -127,7 +126,6 @@ def main() -> bool:
     fold_list = filter(
         lambda x: x[0] != "." and x[-3::] != "log", os.listdir(path_photos)
     )
-    print("fold_list", fold_list)
 
     logger.info("starting align_and_delete")
 
@@ -167,6 +165,7 @@ def main() -> bool:
                 chunk = doc.chunks[-1]
 
                 # delete points outside bounding box
+                # https://www.agisoft.com/forum/index.php?topic=9030.0
                 R = chunk.region.rot  # Bounding box rotation matrix
                 C = chunk.region.center  # Bounding box center vertor
                 size = chunk.region.size
@@ -238,14 +237,10 @@ if __name__ == "__main__":
         t1 = time.time()
         total_time = int(t1 - t0)
         if flag:
-            message = "Completed in " + str(total_time) + " seconds."
-            meta.app.messageBox(
+            message = (
                 "Completed in "
                 + str(total_time)
-                + " seconds.\n Now define points & set scale bar distance before running optandbuild.py"
+                + " seconds.\nNow define points & set scale bar distance before running optandbuild.py"
             )
-            print(
-                "Completed in",
-                total_time,
-                "seconds.\nNow define points & set scale bar distance before running optandbuild.py",
-            )
+            meta.app.messageBox(message)
+            print(message)

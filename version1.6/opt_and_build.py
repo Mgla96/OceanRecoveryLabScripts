@@ -1,9 +1,7 @@
 import os
 import Metashape as meta
-import math
 import time
 import sys
-import typing
 import logging
 from typing import Tuple
 
@@ -117,7 +115,7 @@ def main() -> bool:
     logger = logging.getLogger()
     logger.handlers.clear()
     f_handler = logging.FileHandler(
-        filename=path_photos + "/opt_and_build.log", mode="a"
+        filename=path_photos + divider + "opt_and_build.log", mode="a"
     )
     f_formatter = logging.Formatter("%(asctime)s - %(levelname)s - %(message)s")
     f_handler.setFormatter(f_formatter)
@@ -139,6 +137,7 @@ def main() -> bool:
         chunk.optimizeCameras()
 
         # delete points outside bounding box
+        # https://www.agisoft.com/forum/index.php?topic=9030.0
         R = chunk.region.rot  # Bounding box rotation matrix
         C = chunk.region.center  # Bounding box center vector
         size = chunk.region.size
@@ -259,4 +258,4 @@ if __name__ == "__main__":
         if flag:
             message = "Completed in " + str(total_time) + " seconds."
             meta.app.messageBox(message)
-            print("Completed in", str(total_time), "seconds")
+            print(message)
